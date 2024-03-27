@@ -1,10 +1,7 @@
 import React from "react";
 import {Form, Button} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {v4 as uuid} from "uuid";
 import {useNavigate} from "react-router-dom";
-import Anime from "../data/Anime.js";
-import {useState, useEffect} from "react";  
 
 export default function Add(){
 

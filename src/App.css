@@ -14,6 +14,7 @@
   font-family: "Roboto";
   display: inline-block;
   padding: 14px 32px;
+  margin: 10px 10px;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -55,6 +56,11 @@
 .btn-lg{
   font-size: 24px;
   padding: 14px 40px;
+  margin: 10px 10px;
+}
+
+.checkbox{
+  margin: 10px 10px;
 }
 /* Global Style Ends */
 
@@ -71,6 +77,17 @@
     margin-left: 100px;
     margin-right: 100px;
     padding: 0;
+}
+
+button-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  margin-left: 100px;
+  margin-right: 100px;
+  padding: 0;
+
 }
 
 /* Home Style Ends */

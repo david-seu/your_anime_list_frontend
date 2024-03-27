@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import {Button, Table} from "react-bootstrap";
+import  {Table} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {Link, useNavigate} from "react-router-dom";
 import Anime from "../data/Anime.js";
@@ -9,7 +9,7 @@ export default function Home(){
     let history = useNavigate();
 
     const [animeList, setAnimeList] = useState([]);
-
+    
     useEffect(() => {
         animeList.length > 0 && localStorage.setItem('animeList', JSON.stringify(animeList));
     }, [animeList]);
@@ -24,15 +24,7 @@ export default function Home(){
         }
       }, []);
 
-    const handleDelete = (index) => {
-        if(window.confirm("Are you sure you want to delete this?"))
-        {
-        setAnimeList(animeList.filter((_, i) => i !== index));    
-        history("/");
-        }
-    }
-
-    const handleEdit = (id, title, score, watched) => {
+    const handleEdit = (title, score, watched) => {
         localStorage.setItem('title', title);
         localStorage.setItem('score', score);
         localStorage.setItem('watched', watched);
@@ -42,6 +34,39 @@ export default function Home(){
         localStorage.setItem('title', title);
         localStorage.setItem('score', score);
         localStorage.setItem('watched', watched);
+    }
+
+    const handleDelete = () => {
+        if(window.confirm("Are you sure you want to delete the selected items?"))
+        {
+            setAnimeList(animeList.filter((anime) => anime.checked !== true));
+            history("/");
+        }
+    }
+
+    const handleCheck = (id) => {
+        let newAnimeList = localStorage.getItem('animeList') ? JSON.parse(localStorage.getItem('animeList')) : animeList;
+        newAnimeList.map((anime) => {
+            if(anime.id === id){
+                anime.checked = !anime.checked;
+
+            }
+            return animeList;
+        })
+        setAnimeList(newAnimeList);
+    }
+    
+    const handleDownload = () => {
+        const fileData = localStorage.getItem('animeList');
+        const blob = new Blob([fileData], {type: "text/plain"});
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'animeList.json';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
     }
     
 
@@ -90,7 +115,7 @@ export default function Home(){
                                                     <button className="btn btn-primary" onClick={() => handleView(anime.title, anime.score, anime.watched)}>View</button>
                                                 </Link>
                                                 &nbsp;
-                                                <button className="btn btn-primary" onClick={() => handleDelete(index)}>DELETE</button>
+                                                <input className="checkbox" type="checkbox" checked={anime.checked} onChange={() => handleCheck(anime.id)}/>
                                             </td>
                                         </tr>
                                     )
@@ -99,11 +124,15 @@ export default function Home(){
                     </tbody>
                 </Table>
                 <br />
-                <Link to={'/add'}>
-                    <Button className="btn btn-lg btn-add">Add</Button>
-                </Link>
+                
+                <div className="button-container">
+                    <Link to={'/add'}>
+                        <button className="btn btn-primary btn-lg btn-add">Add</button>
+                    </Link>
+                    <button className="btn btn-primary btn-lg btn-add" onClick={() => handleDelete()}>Delete</button>
+                    <button className="btn btn-primary btn-lg btn-add" onClick={() => handleDownload()}>Download</button>
+                </div>
             </div>
         </Fragment>
     )
 }
-

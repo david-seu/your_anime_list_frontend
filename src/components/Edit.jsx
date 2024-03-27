@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {Button, Form} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Anime from "../data/Anime.js";
 import {useNavigate} from "react-router-dom";
 import {useParams} from "react-router-dom";
 

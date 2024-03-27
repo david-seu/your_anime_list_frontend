@@ -1,6 +1,4 @@
 import React from "react";
-import {useParams} from "react-router-dom";
-import Anime from "../data/Anime.js";
 import { useState } from "react";
 import { useEffect } from "react";
 
