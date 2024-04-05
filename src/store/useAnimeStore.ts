@@ -1,6 +1,7 @@
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { create } from 'zustand'
 import Anime from '../data/Anime'
+import { listAnime } from '../services/AnimeService'
 
 interface AnimeStore {
   animeList: Anime[]
@@ -9,10 +10,12 @@ interface AnimeStore {
   updateAnime: (anime: Anime) => void
 }
 
+const data = await listAnime()
+
 export const useAnimeStore = create<AnimeStore>()(
   persist(
     (set, get) => ({
-      animeList: [], // Add the missing property 'animeList'
+      animeList: data.data || [],
       addAnime: (anime: Anime) =>
         set({ animeList: [...get().animeList, anime] }),
       deleteAnime: (id: number) =>

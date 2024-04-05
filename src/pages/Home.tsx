@@ -104,15 +104,8 @@ export default function Home(): JSX.Element {
                     type="checkbox"
                     checked={anime.checked}
                     onChange={(e) => {
-                      const updatedAnime = {
-                        ...anime,
-                        checked: e.target.checked,
-                      }
-                      setAnimeList((prevList) =>
-                        prevList.map((a) =>
-                          a.id === anime.id ? updatedAnime : a
-                        )
-                      )
+                      // eslint-disable-next-line no-param-reassign
+                      anime.checked = e.target.checked
                     }}
                   />
                 </td>

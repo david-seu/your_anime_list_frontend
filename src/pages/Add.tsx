@@ -6,6 +6,8 @@ import { AlertColor } from '@mui/material'
 import { addAnime } from '../services/AnimeService'
 import Anime from '../data/Anime'
 import CustomizedSnackbars from '../components/CustomizedSnackBars'
+// eslint-disable-next-line import/no-named-as-default
+import useAnimeStore from '../store/useAnimeStore'
 
 export default function Add() {
   const [title, setTitle] = React.useState('')
@@ -14,6 +16,7 @@ export default function Add() {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarType, setSnackbarType] = useState('')
   const [snackbarMessage, setSnackbarMessage] = useState('')
+  const addAnimeStore = useAnimeStore((state) => state.addAnime)
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
@@ -29,6 +32,7 @@ export default function Add() {
     }
 
     addAnime(newAnime).then((result) => {
+      addAnimeStore(newAnime)
       if (result.status === 201) {
         setSnackbarType('success')
         setSnackbarMessage('Successfully added anime')
@@ -38,8 +42,6 @@ export default function Add() {
         setSnackbarMessage('Failed to add anime')
         setSnackbarOpen(true)
       }
-
-      
     })
   }
 
