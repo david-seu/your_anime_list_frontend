@@ -1,59 +1,84 @@
-import { SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Table } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Link } from 'react-router-dom'
 import { AlertColor } from '@mui/material/Alert'
+import io from 'socket.io-client'
 import { deleteAnime, listAnime } from '../services/AnimeService'
 import Anime from '../data/Anime'
 import CustomizedSnackbars from '../components/CustomizedSnackBars'
 // eslint-disable-next-line import/no-named-as-default
 import useAnimeStore from '../store/useAnimeStore'
+import {
+  NetworkStatusIndicator,
+  ServerkStatusIndicator,
+} from '../components/StatusIndicator'
 
 export default function Home(): JSX.Element {
-  const [animeList, setAnimeList] = useState<Anime[]>([])
-  const animeListStore = useAnimeStore((state) => state.animeList)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarType, setSnackbarType] = useState('')
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const deleteAnimeStore = useAnimeStore((state) => state.deleteAnime)
+  const setAnimeStore = useAnimeStore((state) => state.setAnimeList)
+  const animeList = useAnimeStore((state) => state.animeList)
+
+  useEffect(() => {
+    const socket = io('http://localhost:8081')
+
+    socket.on('connect', () => {
+      socket.emit('subscribe', '/topic/anime')
+    })
+
+    socket.on('/topic/anime', (newAnime) => {
+      setAnimeStore([...animeList, newAnime])
+    })
+
+    return () => {
+      socket.disconnect()
+    }
+  }, [setAnimeStore, animeList])
 
   useEffect(() => {
     listAnime()
-      .then((result: { data: SetStateAction<Anime[]>; status: number }) => {
-        setAnimeList(result.data)
+      .then((result: { data: Anime[]; status: number }) => {
+        if (result.status === 200) {
+          setAnimeStore(result.data)
+          setSnackbarType('success')
+          setSnackbarMessage('Successfully fetched anime')
+        }
       })
       .catch(() => {
-        setAnimeList(animeListStore)
         setSnackbarType('error')
         setSnackbarMessage('Failed to fetch anime')
+      })
+      .finally(() => {
         setSnackbarOpen(true)
       })
-  }, [animeListStore])
+  }, [setAnimeStore])
 
   const handleDelete = (): void => {
     animeList.forEach(async (anime) => {
       if (anime.checked) {
         deleteAnime(anime.id)
           .then((result) => {
-            deleteAnimeStore(anime.id)
             if (result.status === 204) {
               setSnackbarType('success')
               setSnackbarMessage('Successfully deleted anime')
-              setSnackbarOpen(true)
             } else {
               setSnackbarType('error')
               setSnackbarMessage('Failed to delete anime')
-              setSnackbarOpen(true)
             }
           })
           .catch(() => {
-            setSnackbarType('error')
-            setSnackbarMessage('Failed to delete anime')
+            setSnackbarType('warning')
+            setSnackbarMessage('Server is down, but anime deleted locally')
+          })
+          .finally(() => {
+            deleteAnimeStore(anime.id)
             setSnackbarOpen(true)
           })
       }
     })
-    setAnimeList((prevList) => prevList.filter((anime) => !anime.checked))
   }
 
   const handleDownload = (): void => {
@@ -71,6 +96,8 @@ export default function Home(): JSX.Element {
 
   return (
     <div className="home--container">
+      <NetworkStatusIndicator />
+      <ServerkStatusIndicator />
       <h1>Your Anime List</h1>
       <br />
       <Table striped bordered hover size="sm">

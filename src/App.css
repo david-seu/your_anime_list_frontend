@@ -58,6 +58,12 @@
   padding: 14px 40px;
   margin: 10px 10px;
 }
+
+
+.container{
+  display: list-item;
+  width: 100%;
+}
 /* Global Style Ends */
 
 

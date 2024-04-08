@@ -29,20 +29,29 @@ export default function Add() {
       watched,
       score,
       checked: false,
+      persisted: false,
     }
 
-    addAnime(newAnime).then((result) => {
-      addAnimeStore(newAnime)
-      if (result.status === 201) {
-        setSnackbarType('success')
-        setSnackbarMessage('Successfully added anime')
+    addAnime(newAnime)
+      .then((result) => {
+        if (result.status !== 201) {
+          newAnime.persisted = false
+          setSnackbarType('error')
+          setSnackbarMessage('Failed to add anime')
+        } else {
+          setSnackbarType('success')
+          setSnackbarMessage('Successfully added anime')
+        }
+      })
+      .catch(() => {
+        newAnime.persisted = false
+        setSnackbarType('warning')
+        setSnackbarMessage('Server is down, but anime added locally')
+      })
+      .finally(() => {
+        addAnimeStore(newAnime)
         setSnackbarOpen(true)
-      } else {
-        setSnackbarType('error')
-        setSnackbarMessage('Failed to add anime')
-        setSnackbarOpen(true)
-      }
-    })
+      })
   }
 
   return (

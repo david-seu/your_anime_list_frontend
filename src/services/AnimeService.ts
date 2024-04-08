@@ -32,3 +32,8 @@ export const deleteAnime = async (animeId: number) => {
   )
   return result
 }
+
+export const getStatus = async () => {
+  const result = await axios.get(`${REST_API_BASE_URL}/status`)
+  return result
+}

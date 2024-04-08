@@ -15,6 +15,7 @@ export default function Edit(): JSX.Element {
   const [watched, setWatched] = useState<boolean>(false)
 
   const updateAnimeStore = useAnimeStore((state) => state.updateAnime)
+  const getAnimeStore = useAnimeStore((state) => state.getAnime)
 
   const { id } = useParams<{ id: string }>() as { id: string }
 
@@ -31,34 +32,53 @@ export default function Edit(): JSX.Element {
       watched,
       score: Number(score),
       checked: false,
+      persisted: true,
     }
 
-    updateAnime(Number(id), newAnime).then((result) => {
-      updateAnimeStore(newAnime)
-      if (result.status === 200) {
-        setSnackbarType('success')
-        setSnackbarMessage('Anime updated successfully')
-      } else {
-        setSnackbarType('error')
-        setSnackbarMessage('Error updating anime')
-      }
-      setSnackbarOpen(true)
-    })
+    updateAnime(Number(id), newAnime)
+      .then((result) => {
+        if (result.status === 200) {
+          setSnackbarType('success')
+          setSnackbarMessage('Anime updated successfully')
+        } else {
+          newAnime.persisted = false
+          setSnackbarType('error')
+          setSnackbarMessage('Error updating anime')
+        }      })
+      .catch(() => {
+        newAnime.persisted = false
+        setSnackbarType('warning')
+        setSnackbarMessage('Server is down, but anime updated locally')
+      })
+      .finally(() => {
+        updateAnimeStore(newAnime)
+        setSnackbarOpen(true)
+      })
   }
 
   useEffect(() => {
     if (id) {
-      getAnime(Number(id)).then(
-        (result: {
-          data: { title: string; score: number; watched: boolean }
-        }) => {
-          setTitle(result.data.title)
-          setScore(result.data.score)
-          setWatched(result.data.watched)
-        }
-      )
+      const anime = getAnimeStore(Number(id))
+
+      getAnime(Number(id))
+        .then(
+          (result: {
+            data: { title: string; score: number; watched: boolean }
+          }) => {
+            setTitle(result.data.title)
+            setScore(result.data.score)
+            setWatched(result.data.watched)
+          }
+        )
+        .catch(() => {
+          if (anime) {
+            setTitle(anime.title)
+            setScore(anime.score)
+            setWatched(anime.watched)
+          }
+        })
     }
-  }, [id])
+  }, [id, getAnimeStore])
 
   return (
     <div>
