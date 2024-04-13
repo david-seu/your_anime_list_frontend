@@ -20,23 +20,20 @@ export default function Home(): JSX.Element {
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const deleteAnimeStore = useAnimeStore((state) => state.deleteAnime)
   const setAnimeStore = useAnimeStore((state) => state.setAnimeList)
+  const addAnimeStore = useAnimeStore((state) => state.addAnime)
   const animeList = useAnimeStore((state) => state.animeList)
 
   useEffect(() => {
     const socket = io('http://localhost:8081')
 
-    socket.on('connect', () => {
-      socket.emit('subscribe', '/topic/anime')
-    })
-
     socket.on('/topic/anime', (newAnime) => {
-      setAnimeStore([...animeList, newAnime])
+      addAnimeStore(newAnime)
     })
 
     return () => {
       socket.disconnect()
     }
-  }, [setAnimeStore, animeList])
+  }, [addAnimeStore, animeList])
 
   useEffect(() => {
     listAnime()
@@ -47,9 +44,15 @@ export default function Home(): JSX.Element {
           setSnackbarMessage('Successfully fetched anime')
         }
       })
-      .catch(() => {
-        setSnackbarType('error')
-        setSnackbarMessage('Failed to fetch anime')
+      .catch((error) => {
+        console.error(error)
+        if (error.message === 'Network Error') {
+          setSnackbarType('error')
+          setSnackbarMessage('Failed to fetch anime, server is down')
+        } else {
+          setSnackbarType('warning')
+          setSnackbarMessage('Unknown error, but anime fetched locally')
+        }
       })
       .finally(() => {
         setSnackbarOpen(true)

@@ -29,8 +29,12 @@ export function ServerkStatusIndicator(): JSX.Element {
       .then(() => {
         setStatus('Server is up')
       })
-      .catch(() => {
-        setStatus('Server is down')
+      .catch((error) => {
+        if (error.message === 'Network Error') {
+          setStatus('Server is down')
+        } else {
+          setStatus('Unknown error')
+        }
       })
   }, [])
 
