@@ -4,7 +4,6 @@ interface Anime {
   watched: boolean
   score: number
   checked: boolean
-  persisted: boolean
 }
 
 export default Anime

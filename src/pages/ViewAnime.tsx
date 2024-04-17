@@ -4,7 +4,7 @@ import { getAnime } from '../services/AnimeService'
 // eslint-disable-next-line import/no-named-as-default
 import useAnimeStore from '../store/useAnimeStore'
 
-function View(): JSX.Element {
+function ViewAnime(): JSX.Element {
   const [title, setTitle] = useState<string>('')
   const [score, setScore] = useState<number>(0)
   const [watched, setWatched] = useState<boolean>(false)
@@ -52,4 +52,4 @@ function View(): JSX.Element {
   )
 }
 
-export default View
+export default ViewAnime

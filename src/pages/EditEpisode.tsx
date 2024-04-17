@@ -4,18 +4,21 @@ import { Button, Form } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Link, useParams } from 'react-router-dom'
 import { AlertColor } from '@mui/material'
-import Anime from '../data/Anime'
-import { getAnime, updateAnime } from '../services/AnimeService'
 import CustomizedSnackbars from '../components/CustomizedSnackBars'
-import useAnimeStore from '../store/useAnimeStore'
+import useEpisodeStore from '../store/useEpisodeStore'
+import Episode from '../data/Episode'
+import { getEpisode, updateEpisode } from '../services/EpisodeService'
 
-export default function Edit(): JSX.Element {
+export default function EditEpisode(): JSX.Element {
   const [title, setTitle] = useState<string>('')
+  const [number, setNumber] = React.useState<number>(0)
+  const [season, setSeason] = React.useState<number>(0)
   const [score, setScore] = useState<number>(0)
   const [watched, setWatched] = useState<boolean>(false)
+  const [animeTitle, setAnimeTitle] = useState('')
 
-  const updateAnimeStore = useAnimeStore((state) => state.updateAnime)
-  const getAnimeStore = useAnimeStore((state) => state.getAnime)
+  const updateEpisodeStore = useEpisodeStore((state) => state.updateEpisode)
+  const getEpisodeStore = useEpisodeStore((state) => state.getEpisode)
 
   const { id } = useParams<{ id: string }>() as { id: string }
 
@@ -26,59 +29,72 @@ export default function Edit(): JSX.Element {
   const handleSubmit = (e: React.FormEvent<HTMLButtonElement>): void => {
     e.preventDefault()
 
-    const newAnime: Anime = {
+    const newEpisode: Episode = {
       id: Number(id),
       title,
+      number,
+      season,
       watched,
       score: Number(score),
       checked: false,
-      persisted: true,
+      animeTitle,
     }
 
-    updateAnime(Number(id), newAnime)
+    updateEpisode(Number(id), newEpisode)
       .then((result) => {
         if (result.status === 200) {
           setSnackbarType('success')
-          setSnackbarMessage('Anime updated successfully')
+          setSnackbarMessage('Episode updated successfully')
         } else {
-          newAnime.persisted = false
           setSnackbarType('error')
-          setSnackbarMessage('Error updating anime')
-        }      })
+          setSnackbarMessage('Error updating episode')
+        }
+      })
       .catch(() => {
-        newAnime.persisted = false
         setSnackbarType('warning')
-        setSnackbarMessage('Server is down, but anime updated locally')
+        setSnackbarMessage('Server is down, but episode updated locally')
       })
       .finally(() => {
-        updateAnimeStore(newAnime)
+        updateEpisodeStore(newEpisode)
         setSnackbarOpen(true)
       })
   }
 
   useEffect(() => {
     if (id) {
-      const anime = getAnimeStore(Number(id))
+      const episode = getEpisodeStore(Number(id))
 
-      getAnime(Number(id))
+      getEpisode(Number(id))
         .then(
           (result: {
-            data: { title: string; score: number; watched: boolean }
+            data: {
+              title: string
+              number: number
+              season: number
+              score: number
+              watched: boolean
+              animeTitle: string
+            }
           }) => {
             setTitle(result.data.title)
+            setNumber(result.data.number)
+            setSeason(result.data.season)
             setScore(result.data.score)
             setWatched(result.data.watched)
+            setAnimeTitle(result.data.animeTitle)
           }
         )
         .catch(() => {
-          if (anime) {
-            setTitle(anime.title)
-            setScore(anime.score)
-            setWatched(anime.watched)
+          if (episode) {
+            setTitle(episode.title)
+            setNumber(episode.number)
+            setSeason(episode.season)
+            setScore(episode.score)
+            setWatched(episode.watched)
           }
         })
     }
-  }, [id, getAnimeStore])
+  }, [id, getEpisodeStore])
 
   return (
     <div>
@@ -100,7 +116,29 @@ export default function Edit(): JSX.Element {
               }
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formSore">
+          <Form.Group className="mb-3" controlId="formNumber">
+            <Form.Label className="">Number</Form.Label>
+            <Form.Control
+              type="number"
+              value={number}
+              required
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setNumber(Number(e.target.value))
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formSeason">
+            <Form.Label className="">Season</Form.Label>
+            <Form.Control
+              type="number"
+              value={season}
+              required
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setSeason(Number(e.target.value))
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formScore">
             <Form.Label className="">Score</Form.Label>
             <Form.Control
               type="number"

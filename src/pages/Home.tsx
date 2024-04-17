@@ -13,15 +13,22 @@ import {
   NetworkStatusIndicator,
   ServerkStatusIndicator,
 } from '../components/StatusIndicator'
+// eslint-disable-next-line import/no-named-as-default
+import useEpisodeStore from '../store/useEpisodeStore'
+import { deleteEpisode, listEpisode } from '../services/EpisodeService'
+import Episode from '../data/Episode'
 
 export default function Home(): JSX.Element {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarType, setSnackbarType] = useState('')
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const deleteAnimeStore = useAnimeStore((state) => state.deleteAnime)
+  const deleteEpisodeStore = useEpisodeStore((state) => state.deleteEpisode)
   const setAnimeStore = useAnimeStore((state) => state.setAnimeList)
+  const setEpisodeStore = useEpisodeStore((state) => state.setEpisodeList)
   const addAnimeStore = useAnimeStore((state) => state.addAnime)
   const animeList = useAnimeStore((state) => state.animeList)
+  const episodeList = useEpisodeStore((state) => state.episodeList)
 
   useEffect(() => {
     const socket = io('http://localhost:8081')
@@ -42,16 +49,19 @@ export default function Home(): JSX.Element {
           setAnimeStore(result.data)
           setSnackbarType('success')
           setSnackbarMessage('Successfully fetched anime')
+        } else if (result.status === 204) {
+          setAnimeStore([])
+          setSnackbarType('info')
+          setSnackbarMessage('No anime found')
         }
       })
       .catch((error) => {
-        console.error(error)
         if (error.message === 'Network Error') {
           setSnackbarType('error')
           setSnackbarMessage('Failed to fetch anime, server is down')
         } else {
           setSnackbarType('warning')
-          setSnackbarMessage('Unknown error, but anime fetched locally')
+          setSnackbarMessage('Unknown error')
         }
       })
       .finally(() => {
@@ -59,7 +69,34 @@ export default function Home(): JSX.Element {
       })
   }, [setAnimeStore])
 
-  const handleDelete = (): void => {
+  useEffect(() => {
+    listEpisode()
+      .then((result: { data: Episode[]; status: number }) => {
+        if (result.status === 200) {
+          setEpisodeStore(result.data)
+          setSnackbarType('success')
+          setSnackbarMessage('Successfully fetched episodes')
+        } else if (result.status === 204) {
+          setEpisodeStore([])
+          setSnackbarType('info')
+          setSnackbarMessage('No episodes found')
+        }
+      })
+      .catch((error) => {
+        if (error.message === 'Network Error') {
+          setSnackbarType('error')
+          setSnackbarMessage('Failed to fetch episode, server is down')
+        } else {
+          setSnackbarType('warning')
+          setSnackbarMessage('Unknown error')
+        }
+      })
+      .finally(() => {
+        setSnackbarOpen(true)
+      })
+  }, [setEpisodeStore, animeList])
+
+  const handleDeleteAnime = (): void => {
     animeList.forEach(async (anime) => {
       if (anime.checked) {
         deleteAnime(anime.id)
@@ -78,6 +115,31 @@ export default function Home(): JSX.Element {
           })
           .finally(() => {
             deleteAnimeStore(anime.id)
+            setSnackbarOpen(true)
+          })
+      }
+    })
+  }
+
+  const handleDeleteEpisode = (): void => {
+    episodeList.forEach(async (episode) => {
+      if (episode.checked) {
+        deleteEpisode(episode.id)
+          .then((result) => {
+            if (result.status === 204) {
+              setSnackbarType('success')
+              setSnackbarMessage('Successfully deleted episode')
+            } else {
+              setSnackbarType('error')
+              setSnackbarMessage('Failed to delete episode')
+            }
+          })
+          .catch(() => {
+            setSnackbarType('warning')
+            setSnackbarMessage('Server is down, but episode deleted locally')
+          })
+          .finally(() => {
+            deleteEpisodeStore(episode.id)
             setSnackbarOpen(true)
           })
       }
@@ -103,68 +165,134 @@ export default function Home(): JSX.Element {
       <ServerkStatusIndicator />
       <h1>Your Anime List</h1>
       <br />
-      <Table striped bordered hover size="sm">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Watched</th>
-            <th>Score</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {animeList.map((anime: Anime) => {
-            return (
-              <tr key={anime.id}>
-                <td>{anime.title}</td>
-                <td>{anime.watched ? 'Yes' : 'No'}</td>
-                <td>{anime.score > 0 ? anime.score : 'N/A'}</td>
-                <td key={anime.id} className="button-container">
-                  <Link to={`/edit/${anime.id}`}>
-                    <button type="button" className="btn btn-primary">
-                      Edit
-                    </button>
-                  </Link>
-                  <Link to={`/view/${anime.id}`}>
-                    <button type="button" className="btn btn-primary">
-                      View
-                    </button>
-                  </Link>
-                  <input
-                    type="checkbox"
-                    checked={anime.checked}
-                    onChange={(e) => {
-                      // eslint-disable-next-line no-param-reassign
-                      anime.checked = e.target.checked
-                    }}
-                  />
-                </td>
+      <div className="tables--container">
+        <div className="table">
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Watched</th>
+                <th>Score</th>
+                <th>Actions</th>
               </tr>
-            )
-          })}
-        </tbody>
-      </Table>
+            </thead>
+            <tbody>
+              {animeList.map((anime: Anime) => {
+                return (
+                  <tr key={anime.id}>
+                    <td>{anime.title}</td>
+                    <td>{anime.watched ? 'Yes' : 'No'}</td>
+                    <td>{anime.score > 0 ? anime.score : 'N/A'}</td>
+                    <td key={anime.id} className="button-container">
+                      <Link to={`/editAnime/${anime.id}`}>
+                        <button type="button" className="btn btn-primary">
+                          Edit
+                        </button>
+                      </Link>
+                      <Link to={`/viewAnime/${anime.id}`}>
+                        <button type="button" className="btn btn-primary">
+                          View
+                        </button>
+                      </Link>
+                      <input
+                        type="checkbox"
+                        checked={anime.checked}
+                        onChange={(e) => {
+                          // eslint-disable-next-line no-param-reassign
+                          anime.checked = e.target.checked
+                        }}
+                      />
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </Table>
+        </div>
+        <div className="table">
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Number</th>
+                <th>Season</th>
+                <th>Watched</th>
+                <th>Score</th>
+                <th>Anime</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {episodeList.map((episode: Episode) => {
+                return (
+                  <tr key={episode.id}>
+                    <td>{episode.title}</td>
+                    <td>{episode.number}</td>
+                    <td>{episode.season}</td>
+                    <td>{episode.watched ? 'Yes' : 'No'}</td>
+                    <td>{episode.score > 0 ? episode.score : 'N/A'}</td>
+                    <td>{episode.animeTitle}</td>
+                    <td key={episode.id} className="button-container">
+                      <Link to={`/editEpisode/${episode.id}`}>
+                        <button type="button" className="btn btn-primary">
+                          Edit
+                        </button>
+                      </Link>
+                      <Link to={`/viewEpisode/${episode.id}`}>
+                        <button type="button" className="btn btn-primary">
+                          View
+                        </button>
+                      </Link>
+                      <input
+                        type="checkbox"
+                        checked={episode.checked}
+                        onChange={(e) => {
+                          // eslint-disable-next-line no-param-reassign
+                          episode.checked = e.target.checked
+                        }}
+                      />
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </Table>
+        </div>
+      </div>
+
       <br />
 
       <div className="button-container">
-        <Link to="/add">
+        <Link to="/addAnime">
           <button type="button" className="btn btn-primary btn-lg btn-add">
-            Add
+            Add Anime
           </button>
         </Link>
         <button
           type="button"
           className="btn btn-primary btn-lg btn-add"
-          onClick={() => handleDelete()}
+          onClick={() => handleDeleteAnime()}
         >
-          Delete
+          Delete Anime
         </button>
         <button
           type="button"
           className="btn btn-primary btn-lg btn-add"
           onClick={() => handleDownload()}
         >
-          Download
+          Download Anime
+        </button>
+        <Link to="/addEpisode">
+          <button type="button" className="btn btn-primary btn-lg btn-add">
+            Add Episode
+          </button>
+        </Link>
+        <button
+          type="button"
+          className="btn btn-primary btn-lg btn-add"
+          onClick={() => handleDeleteEpisode()}
+        >
+          Delete Episode
         </button>
         <CustomizedSnackbars
           open={snackbarOpen}

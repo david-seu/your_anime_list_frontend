@@ -9,7 +9,7 @@ import CustomizedSnackbars from '../components/CustomizedSnackBars'
 // eslint-disable-next-line import/no-named-as-default
 import useAnimeStore from '../store/useAnimeStore'
 
-export default function Add() {
+export default function AddAnime() {
   const [title, setTitle] = React.useState('')
   const [score, setScore] = React.useState<number>(0)
   const [watched, setWatched] = React.useState(false)
@@ -29,13 +29,11 @@ export default function Add() {
       watched,
       score,
       checked: false,
-      persisted: false,
     }
 
     addAnime(newAnime)
       .then((result) => {
         if (result.status !== 201) {
-          newAnime.persisted = false
           setSnackbarType('error')
           setSnackbarMessage('Failed to add anime')
         } else {
@@ -44,7 +42,6 @@ export default function Add() {
         }
       })
       .catch(() => {
-        newAnime.persisted = false
         setSnackbarType('warning')
         setSnackbarMessage('Server is down, but anime added locally')
       })

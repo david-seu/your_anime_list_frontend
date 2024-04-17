@@ -81,6 +81,11 @@
     padding: 0;
 }
 
+.tables--container{
+  display: flex;
+  justify-content: space-between;
+}
+
 button-container{
   display: flex;
   justify-content: space-between;
@@ -90,6 +95,9 @@ button-container{
   width: 100%;
 }
 
+.table{
+  padding: 20px;
+}
 
 /* Home Style Ends */
 
@@ -101,6 +109,7 @@ button-container{
   list-style: none;
   line-height: 50px;
 }
+
 /* View Style Ends */
 
 /* Edit Style Starts */
