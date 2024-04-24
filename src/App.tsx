@@ -15,7 +15,7 @@ import {
 function App() {
   return (
     <div>
-      <NetworkStatusIndicator />
+      {/* <NetworkStatusIndicator /> */}
       <ServerkStatusIndicator />
       <Routes>
         <Route path="/" element={<Home />} />

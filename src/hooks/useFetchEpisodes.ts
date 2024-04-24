@@ -24,8 +24,6 @@ const useFetchEpisodes = ({
         if (result.status === 200) {
           result.data.forEach((episode) => {
             // eslint-disable-next-line no-param-reassign
-            episode.checked = false
-            // eslint-disable-next-line no-param-reassign
             episode.persisted = true
           })
           setEpisodeStore(result.data)

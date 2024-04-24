@@ -61,10 +61,10 @@ export default function AnimeTable({ animeList }: AnimeTableProps) {
                   </Link>
                   <input
                     type="checkbox"
-                    checked={anime.checked}
                     onChange={(e) => {
                       // eslint-disable-next-line no-param-reassign
                       anime.checked = e.target.checked
+                      updateAnimeStore(anime)
                     }}
                   />
                 </td>

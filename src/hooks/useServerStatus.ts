@@ -16,21 +16,14 @@ const useServerStatus = () => {
     const checkStatus = () => {
       getStatus()
         .then(() => {
-          console.log(status)
-          if (status === 'Offline') {
+          if (status !== 'Online') {
             syncAnime(getDirtyAnime())
             syncEpisode(getDirtyEpisode())
             setStatus('Online')
-          } else {
-            setStatus('Online')
           }
         })
-        .catch((error) => {
-          if (error.message === 'Network Error') {
-            setStatus('Offline')
-          } else {
-            setStatus('Unknown')
-          }
+        .catch(() => {
+          setStatus('Offline')
         })
     }
 

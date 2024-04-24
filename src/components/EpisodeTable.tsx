@@ -62,7 +62,6 @@ export default function EpisodeTable({ episodeList }: EpisodeTableProps) {
                   </Link>
                   <input
                     type="checkbox"
-                    checked={episode.checked}
                     onChange={(e) => {
                       // eslint-disable-next-line no-param-reassign
                       episode.checked = e.target.checked

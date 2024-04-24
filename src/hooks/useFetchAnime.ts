@@ -24,8 +24,6 @@ const useFetchAnime = ({
         if (result.status === 200) {
           result.data.forEach((anime) => {
             // eslint-disable-next-line no-param-reassign
-            anime.checked = false
-            // eslint-disable-next-line no-param-reassign
             anime.persisted = true
           })
           setAnimeStore(result.data)

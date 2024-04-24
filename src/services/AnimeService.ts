@@ -46,6 +46,6 @@ export const deleteAnime = async (animeId: number) => {
 }
 
 export const getStatus = async () => {
-  const result = await axios.get(`${REST_API_BASE_URL}/status`)
+  const result = await axios.get('http://localhost:8081/actuator/health')
   return result
 }
