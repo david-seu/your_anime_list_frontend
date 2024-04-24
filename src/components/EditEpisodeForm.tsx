@@ -11,7 +11,7 @@ interface EditEpisodeFormProps {
   setSeason: (season: number) => void
   setScore: (score: number) => void
   setWatched: (watched: boolean) => void
-  handleSubmit: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  handleSubmit: (e: React.FormEvent<HTMLButtonElement>) => void
 }
 
 export default function EditEpisodeForm({

@@ -34,6 +34,7 @@ const useAddAnime = ({
       score,
       checked: false,
       persisted: true,
+      numEpisodes: 0,
     }
     addAnime(newAnime)
       .then((result) => {

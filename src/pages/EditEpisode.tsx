@@ -4,12 +4,10 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { useParams } from 'react-router-dom'
 import { AlertColor } from '@mui/material'
 import CustomizedSnackbars from '../components/CustomizedSnackBars'
-import useEpisodeStore from '../store/useEpisodeStore'
-import Episode from '../data/Episode'
-import { updateEpisode } from '../services/EpisodeService'
 import useFetchEpisodeById from '../hooks/useFetchEpisodeById'
 import LinkButton from '../components/LinkButton'
 import EditEpisodeForm from '../components/EditEpisodeForm'
+import useEditEpisode from '../hooks/useEditEpisode'
 
 export default function EditEpisode(): JSX.Element {
   const [title, setTitle] = useState<string>('')
@@ -17,9 +15,7 @@ export default function EditEpisode(): JSX.Element {
   const [season, setSeason] = React.useState<number>(0)
   const [score, setScore] = useState<number>(0)
   const [watched, setWatched] = useState<boolean>(false)
-  const [, setAnimeTitle] = useState<string>('')
-
-  const updateEpisodeStore = useEpisodeStore((state) => state.updateEpisode)
+  const [animeTitle, setAnimeTitle] = useState<string>('')
 
   const { id } = useParams<{ id: string }>() as { id: string }
 
@@ -27,40 +23,18 @@ export default function EditEpisode(): JSX.Element {
   const [snackbarType, setSnackbarType] = useState('')
   const [snackbarMessage, setSnackbarMessage] = useState('')
 
-  const handleSubmit = (e: React.FormEvent<HTMLButtonElement>): void => {
-    e.preventDefault()
-
-    const newEpisode: Episode = {
-      id: Number(id),
-      title,
-      number,
-      season,
-      watched,
-      score: Number(score),
-      checked: false,
-      animeTitle: '',
-      persisted: true,
-    }
-
-    updateEpisode(Number(id), newEpisode)
-      .then((result) => {
-        if (result.status === 200) {
-          setSnackbarType('success')
-          setSnackbarMessage('Episode updated successfully')
-        } else {
-          setSnackbarType('error')
-          setSnackbarMessage('Error updating episode')
-        }
-      })
-      .catch(() => {
-        setSnackbarType('warning')
-        setSnackbarMessage('Server is down, but episode updated locally')
-      })
-      .finally(() => {
-        updateEpisodeStore(newEpisode)
-        setSnackbarOpen(true)
-      })
-  }
+  const handleSubmit = useEditEpisode({
+    id,
+    title,
+    number,
+    season,
+    watched,
+    score,
+    animeTitle,
+    setSnackbarOpen,
+    setSnackbarType,
+    setSnackbarMessage,
+  })
 
   useFetchEpisodeById({
     id,

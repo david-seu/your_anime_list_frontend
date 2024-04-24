@@ -13,6 +13,7 @@ export default function EditAnime(): JSX.Element {
   const [title, setTitle] = useState<string>('')
   const [score, setScore] = useState<number>(0)
   const [watched, setWatched] = useState<boolean>(false)
+  const [numEpisodes, setNumEpisodes] = useState<number>(0)
 
   const { id } = useParams<{ id: string }>() as { id: string }
 
@@ -25,6 +26,7 @@ export default function EditAnime(): JSX.Element {
     setTitle,
     setScore,
     setWatched,
+    setNumEpisodes,
   })
 
   const handleSubmit = useEditAnime({
@@ -32,6 +34,7 @@ export default function EditAnime(): JSX.Element {
     title,
     score,
     watched,
+    numEpisodes,
     setSnackbarOpen,
     setSnackbarType,
     setSnackbarMessage,

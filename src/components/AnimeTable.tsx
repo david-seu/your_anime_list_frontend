@@ -65,7 +65,6 @@ export default function AnimeTable({ animeList }: AnimeTableProps) {
                     onChange={(e) => {
                       // eslint-disable-next-line no-param-reassign
                       anime.checked = e.target.checked
-                      updateAnimeStore(anime)
                     }}
                   />
                 </td>

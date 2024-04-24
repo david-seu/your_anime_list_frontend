@@ -7,6 +7,7 @@ function ViewAnime(): JSX.Element {
   const [title, setTitle] = useState<string>('')
   const [score, setScore] = useState<number>(0)
   const [watched, setWatched] = useState<boolean>(false)
+  const [numEpisodes, setNumEpisodes] = useState<number>(0)
 
   const { id } = useParams<{ id: string }>() as unknown as { id: string }
 
@@ -15,6 +16,7 @@ function ViewAnime(): JSX.Element {
     setTitle,
     setScore,
     setWatched,
+    setNumEpisodes,
   })
 
   return (
@@ -25,6 +27,7 @@ function ViewAnime(): JSX.Element {
         <h1>{title}</h1>
         <p>Watched: {watched ? 'Yes' : 'No'}</p>
         <p>Score: {score < 0 ? 'N/A' : score}</p>
+        <p>Number of Episodes: {numEpisodes}</p>
       </div>
     </div>
   )

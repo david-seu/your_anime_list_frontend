@@ -8,6 +8,7 @@ interface UseEditAnimeProps {
   title: string
   score: number
   watched: boolean
+  numEpisodes: number
   setSnackbarOpen: Dispatch<SetStateAction<boolean>>
   setSnackbarType: Dispatch<SetStateAction<string>>
   setSnackbarMessage: Dispatch<SetStateAction<string>>
@@ -18,6 +19,7 @@ const useEditAnime = ({
   title,
   score,
   watched,
+  numEpisodes,
   setSnackbarOpen,
   setSnackbarType,
   setSnackbarMessage,
@@ -34,6 +36,7 @@ const useEditAnime = ({
       score: Number(score),
       checked: false,
       persisted: true,
+      numEpisodes,
     }
 
     updateAnime(Number(id), newAnime)
