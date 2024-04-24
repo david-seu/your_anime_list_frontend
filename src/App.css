@@ -82,8 +82,10 @@
 }
 
 .tables--container{
-  display: flex;
-  justify-content: space-between;
+  display: list-item;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
 }
 
 button-container{

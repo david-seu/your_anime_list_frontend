@@ -5,8 +5,8 @@ module.exports = {
   },
   extends: [
     'airbnb',
-    'airbnb/hooks',
     'airbnb-typescript',
+    'airbnb/hooks',
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:prettier/recommended',
@@ -30,7 +30,6 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'react', 'prettier'],
   rules: {
-    'react/react-in-jsx-scope': 'off',
-    'import/extensions': 'off',
+    'react/react-in-jsx-scope': 0,
   },
 }

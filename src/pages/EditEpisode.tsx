@@ -1,13 +1,15 @@
 /* eslint-disable import/no-named-as-default */
-import React, { useState, useEffect } from 'react'
-import { Button, Form } from 'react-bootstrap'
+import React, { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { AlertColor } from '@mui/material'
 import CustomizedSnackbars from '../components/CustomizedSnackBars'
 import useEpisodeStore from '../store/useEpisodeStore'
 import Episode from '../data/Episode'
-import { getEpisode, updateEpisode } from '../services/EpisodeService'
+import { updateEpisode } from '../services/EpisodeService'
+import useFetchEpisodeById from '../hooks/useFetchEpisodeById'
+import LinkButton from '../components/LinkButton'
+import EditEpisodeForm from '../components/EditEpisodeForm'
 
 export default function EditEpisode(): JSX.Element {
   const [title, setTitle] = useState<string>('')
@@ -15,10 +17,9 @@ export default function EditEpisode(): JSX.Element {
   const [season, setSeason] = React.useState<number>(0)
   const [score, setScore] = useState<number>(0)
   const [watched, setWatched] = useState<boolean>(false)
-  const [animeTitle, setAnimeTitle] = useState('')
+  const [, setAnimeTitle] = useState<string>('')
 
   const updateEpisodeStore = useEpisodeStore((state) => state.updateEpisode)
-  const getEpisodeStore = useEpisodeStore((state) => state.getEpisode)
 
   const { id } = useParams<{ id: string }>() as { id: string }
 
@@ -37,7 +38,8 @@ export default function EditEpisode(): JSX.Element {
       watched,
       score: Number(score),
       checked: false,
-      animeTitle,
+      animeTitle: '',
+      persisted: true,
     }
 
     updateEpisode(Number(id), newEpisode)
@@ -60,115 +62,33 @@ export default function EditEpisode(): JSX.Element {
       })
   }
 
-  useEffect(() => {
-    if (id) {
-      const episode = getEpisodeStore(Number(id))
-
-      getEpisode(Number(id))
-        .then(
-          (result: {
-            data: {
-              title: string
-              number: number
-              season: number
-              score: number
-              watched: boolean
-              animeTitle: string
-            }
-          }) => {
-            setTitle(result.data.title)
-            setNumber(result.data.number)
-            setSeason(result.data.season)
-            setScore(result.data.score)
-            setWatched(result.data.watched)
-            setAnimeTitle(result.data.animeTitle)
-          }
-        )
-        .catch(() => {
-          if (episode) {
-            setTitle(episode.title)
-            setNumber(episode.number)
-            setSeason(episode.season)
-            setScore(episode.score)
-            setWatched(episode.watched)
-          }
-        })
-    }
-  }, [id, getEpisodeStore])
+  useFetchEpisodeById({
+    id,
+    setTitle,
+    setNumber,
+    setSeason,
+    setScore,
+    setWatched,
+    setAnimeTitle,
+  })
 
   return (
     <div>
-      <Link to="/">
-        <button type="button" className="btn btn-primary btn-lg btn-add">
-          Back to Home
-        </button>
-      </Link>
+      <LinkButton to="/">Back</LinkButton>
       <div className="edit--container">
-        <Form>
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Title</Form.Label>
-            <Form.Control
-              type="text"
-              value={title}
-              required
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setTitle(e.target.value)
-              }
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formNumber">
-            <Form.Label className="">Number</Form.Label>
-            <Form.Control
-              type="number"
-              value={number}
-              required
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setNumber(Number(e.target.value))
-              }
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formSeason">
-            <Form.Label className="">Season</Form.Label>
-            <Form.Control
-              type="number"
-              value={season}
-              required
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setSeason(Number(e.target.value))
-              }
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formScore">
-            <Form.Label className="">Score</Form.Label>
-            <Form.Control
-              type="number"
-              value={score}
-              required
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setScore(Number(e.target.value))
-              }
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formWatched">
-            <Form.Check
-              type="checkbox"
-              label="Watched"
-              checked={watched}
-              required
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setWatched(e.target.checked)
-              }
-            />
-          </Form.Group>
-          <Button
-            onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-              handleSubmit(e)
-            }
-            type="submit"
-          >
-            Update
-          </Button>
-        </Form>
+        <EditEpisodeForm
+          title={title}
+          number={number}
+          season={season}
+          score={score}
+          watched={watched}
+          setTitle={setTitle}
+          setNumber={setNumber}
+          setSeason={setSeason}
+          setScore={setScore}
+          setWatched={setWatched}
+          handleSubmit={handleSubmit}
+        />
         <CustomizedSnackbars
           open={snackbarOpen}
           type={snackbarType as AlertColor}
