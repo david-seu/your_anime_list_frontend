@@ -20,8 +20,6 @@ export default function Home(): JSX.Element {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarType, setSnackbarType] = useState('')
   const [snackbarMessage, setSnackbarMessage] = useState('')
-  const deleteAnimeStore = useAnimeStore((state) => state.deleteAnime)
-  const deleteEpisodeStore = useEpisodeStore((state) => state.deleteEpisode)
   const setAnimeStore = useAnimeStore((state) => state.setAnimeList)
   const setEpisodeStore = useEpisodeStore((state) => state.setEpisodeList)
   const animeList = useAnimeStore((state) => state.getAllAnime)()
@@ -45,7 +43,6 @@ export default function Home(): JSX.Element {
     setSnackbarType,
     setSnackbarMessage,
     setSnackbarOpen,
-    deleteAnimeStore,
     animeList,
   })
 
@@ -53,7 +50,6 @@ export default function Home(): JSX.Element {
     setSnackbarType,
     setSnackbarMessage,
     setSnackbarOpen,
-    deleteEpisodeStore,
     episodeList,
   })
 

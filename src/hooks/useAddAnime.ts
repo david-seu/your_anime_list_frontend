@@ -33,9 +33,10 @@ const useAddAnime = ({
       watched,
       score,
       checked: false,
-      persisted: true,
       numEpisodes: 0,
     }
+    addAnimeStore(newAnime)
+
     addAnime(newAnime)
       .then((result) => {
         if (result.status !== 201) {
@@ -47,12 +48,10 @@ const useAddAnime = ({
         }
       })
       .catch(() => {
-        newAnime.persisted = false
         setSnackbarType('warning')
         setSnackbarMessage('Server is down, but anime added locally')
       })
       .finally(() => {
-        addAnimeStore(newAnime)
         setSnackbarOpen(true)
       })
   }

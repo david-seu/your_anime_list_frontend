@@ -22,10 +22,6 @@ const useFetchAnime = ({
     listAnime(page)
       .then((result: { data: Anime[]; status: number }) => {
         if (result.status === 200) {
-          result.data.forEach((anime) => {
-            // eslint-disable-next-line no-param-reassign
-            anime.persisted = true
-          })
           setAnimeStore(result.data)
           setSnackbarType('success')
           setSnackbarMessage('Successfully fetched anime')

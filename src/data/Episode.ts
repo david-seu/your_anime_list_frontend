@@ -7,7 +7,6 @@ interface Episode {
   checked: boolean
   watched: boolean
   animeTitle: string
-  persisted: boolean
 }
 
 export default Episode

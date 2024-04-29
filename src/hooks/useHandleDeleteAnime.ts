@@ -11,7 +11,6 @@ interface UseHandleDeleteAnimeProps {
   setSnackbarType: (type: string) => void
   setSnackbarMessage: (message: string) => void
   setSnackbarOpen: (open: boolean) => void
-  deleteAnimeStore: (id: number) => void
   animeList: Anime[]
 }
 
@@ -19,41 +18,27 @@ const useHandleDeleteAnime = ({
   setSnackbarType,
   setSnackbarMessage,
   setSnackbarOpen,
-  deleteAnimeStore,
   animeList,
 }: UseHandleDeleteAnimeProps) => {
   const episodeList = useEpisodeStore((state) => state.getAllEpisodes)()
   const setEpisodeStore = useEpisodeStore((state) => state.setEpisodeList)
-  const updateAnimeStore = useAnimeStore((state) => state.updateAnime)
+  const deleteAnimeStore = useAnimeStore((state) => state.deleteAnime)
+
   return useCallback(() => {
     animeList.forEach(async (anime) => {
       if (anime.checked) {
+        deleteAnimeStore(anime.id)
         deleteAnime(anime.id)
           .then((result) => {
             if (result.status === 204) {
-              deleteAnimeStore(anime.id)
               setSnackbarType('success')
               setSnackbarMessage('Successfully deleted anime')
             } else {
-              // eslint-disable-next-line no-param-reassign
-              anime.persisted = false
-              updateAnimeStore(anime)
               setSnackbarType('error')
               setSnackbarMessage('Failed to delete anime')
             }
           })
           .catch(() => {
-            // eslint-disable-next-line no-param-reassign
-            anime.persisted = false
-            updateAnimeStore(anime)
-            episodeList.forEach((episode) => {
-              if (episode.animeTitle === anime.title) {
-                // eslint-disable-next-line no-param-reassign
-                episode.persisted = false
-                // eslint-disable-next-line no-param-reassign
-                episode.checked = true
-              }
-            })
             setEpisodeStore(episodeList)
             setSnackbarType('warning')
             setSnackbarMessage('Server is down, but anime deleted locally')
@@ -68,9 +53,8 @@ const useHandleDeleteAnime = ({
     deleteAnimeStore,
     setSnackbarType,
     setSnackbarMessage,
-    updateAnimeStore,
-    episodeList,
     setEpisodeStore,
+    episodeList,
     setSnackbarOpen,
   ])
 }

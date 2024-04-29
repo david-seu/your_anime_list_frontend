@@ -27,6 +27,7 @@ const useAddEpisode = ({
   setSnackbarMessage,
 }: UseAddEpisodeProps) => {
   const addEpisodeStore = useEpisodeStore((state) => state.addEpisode)
+  const deleteEpisodeStore = useEpisodeStore((state) => state.deleteEpisode)
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
@@ -42,13 +43,12 @@ const useAddEpisode = ({
       watched,
       checked: false,
       animeTitle,
-      persisted: true,
     }
+    addEpisodeStore(newEpisode)
 
     addEpisode(newEpisode)
       .then((result) => {
         if (result.status !== 201) {
-          newEpisode.persisted = false
           addEpisodeStore(newEpisode)
           setSnackbarType('error')
           setSnackbarMessage('Failed to add episode')
@@ -60,15 +60,13 @@ const useAddEpisode = ({
       })
       .catch((error) => {
         if (error.message === 'Network Error') {
-          newEpisode.persisted = false
-          addEpisodeStore(newEpisode)
           setSnackbarType('warning')
           setSnackbarMessage('Server is down, but episode added locally')
         } else if (error.response.status === 404) {
           setSnackbarType('error')
+          deleteEpisodeStore(id)
           setSnackbarMessage('Failed to add episode, invalid anime title')
         } else {
-          newEpisode.persisted = false
           addEpisodeStore(newEpisode)
           setSnackbarType('error')
           setSnackbarMessage('Failed to add episode, unknown error')

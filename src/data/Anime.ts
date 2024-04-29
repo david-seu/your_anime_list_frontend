@@ -5,7 +5,6 @@ interface Anime {
   score: number
   numEpisodes: number
   checked: boolean
-  persisted: boolean
 }
 
 export default Anime

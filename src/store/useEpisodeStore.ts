@@ -13,7 +13,6 @@ interface EpisodeStore {
   setIdList: (idList: number[]) => void
   getEpisode: (id: number) => Episode
   getAllEpisodes: () => Episode[]
-  getDirtyEpisode: () => Episode[]
   nextPage: () => void
   prevPage: () => void
 }
@@ -42,12 +41,7 @@ export const useEpisodeStore = create<EpisodeStore>()(
         }),
       getEpisode: (id: number) =>
         get().episodeList.find((episode) => episode.id === id)!,
-      getAllEpisodes: () =>
-        get().episodeList.filter(
-          (episode) => episode.persisted === true || episode.checked === false
-        ),
-      getDirtyEpisode: () =>
-        get().episodeList.filter((episode) => episode.persisted === false),
+      getAllEpisodes: () => get().episodeList,
     }),
     {
       name: 'episode-store',

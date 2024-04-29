@@ -13,7 +13,6 @@ interface AnimeStore {
   setAnimeList: (animeList: Anime[]) => void
   getAnime: (id: number) => Anime
   getAllAnime: () => Anime[]
-  getDirtyAnime: () => Anime[]
   nextPage: () => void
   prevPage: () => void
 }
@@ -40,11 +39,7 @@ export const useAnimeStore = create<AnimeStore>()(
         }),
       getAnime: (id: number) =>
         get().animeList.find((anime) => anime.id === id)!,
-      getAllAnime: () =>
-        get().animeList.filter(
-          (anime) => anime.persisted === true || anime.checked === false
-        ),
-      getDirtyAnime: () => get().animeList.filter((anime) => !anime.persisted),
+      getAllAnime: () => get().animeList,
     }),
     {
       name: 'anime-store',

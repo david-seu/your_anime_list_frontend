@@ -8,7 +8,6 @@ interface UseHandleDeleteEpisodeProps {
   setSnackbarType: (type: string) => void
   setSnackbarMessage: (message: string) => void
   setSnackbarOpen: (open: boolean) => void
-  deleteEpisodeStore: (id: number) => void
   episodeList: Episode[]
 }
 
@@ -16,44 +15,32 @@ const useHandleDeleteEpisode = ({
   setSnackbarType,
   setSnackbarMessage,
   setSnackbarOpen,
-  deleteEpisodeStore,
   episodeList,
 }: UseHandleDeleteEpisodeProps) => {
-  const updateEpisodeStore = useEpisodeStore((state) => state.updateEpisode)
+  const deleteEpisodeStore = useEpisodeStore((state) => state.deleteEpisode)
+
   return useCallback(() => {
     episodeList.forEach(async (episode) => {
       if (episode.checked) {
-        if (episode.persisted === false) {
-          deleteEpisodeStore(episode.id)
-          setSnackbarType('success')
-          setSnackbarMessage('Successfully deleted episode')
-          setSnackbarOpen(true)
-        } else {
-          deleteEpisode(episode.id)
-            .then((result) => {
-              if (result.status === 204) {
-                deleteEpisodeStore(episode.id)
-                setSnackbarType('success')
-                setSnackbarMessage('Successfully deleted episode')
-              } else {
-                // eslint-disable-next-line no-param-reassign
-                episode.persisted = false
-                updateEpisodeStore(episode)
-                setSnackbarType('error')
-                setSnackbarMessage('Failed to delete episode')
-              }
-            })
-            .catch(() => {
-              // eslint-disable-next-line no-param-reassign
-              episode.persisted = false
-              updateEpisodeStore(episode)
-              setSnackbarType('warning')
-              setSnackbarMessage('Server is down, but episode deleted locally')
-            })
-            .finally(() => {
-              setSnackbarOpen(true)
-            })
-        }
+        deleteEpisodeStore(episode.id)
+
+        deleteEpisode(episode.id)
+          .then((result) => {
+            if (result.status === 204) {
+              setSnackbarType('success')
+              setSnackbarMessage('Successfully deleted episode')
+            } else {
+              setSnackbarType('error')
+              setSnackbarMessage('Failed to delete episode')
+            }
+          })
+          .catch(() => {
+            setSnackbarType('warning')
+            setSnackbarMessage('Server is down, but episode deleted locally')
+          })
+          .finally(() => {
+            setSnackbarOpen(true)
+          })
       }
     })
   }, [
@@ -61,7 +48,6 @@ const useHandleDeleteEpisode = ({
     deleteEpisodeStore,
     setSnackbarType,
     setSnackbarMessage,
-    updateEpisodeStore,
     setSnackbarOpen,
   ])
 }

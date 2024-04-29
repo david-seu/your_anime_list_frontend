@@ -42,8 +42,8 @@ const useEditEpisode = ({
       score: Number(score),
       checked: false,
       animeTitle,
-      persisted: true,
     }
+    updateEpisodeStore(newEpisode)
 
     updateEpisode(Number(id), newEpisode)
       .then((result) => {
@@ -51,18 +51,15 @@ const useEditEpisode = ({
           setSnackbarType('success')
           setSnackbarMessage('Episode updated successfully')
         } else {
-          newEpisode.persisted = false
           setSnackbarType('error')
           setSnackbarMessage('Error updating episode')
         }
       })
       .catch(() => {
-        newEpisode.persisted = false
         setSnackbarType('warning')
         setSnackbarMessage('Server is down, but episode updated locally')
       })
       .finally(() => {
-        updateEpisodeStore(newEpisode)
         setSnackbarOpen(true)
       })
   }

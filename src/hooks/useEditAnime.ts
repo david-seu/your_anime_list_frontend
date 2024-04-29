@@ -35,9 +35,9 @@ const useEditAnime = ({
       watched,
       score: Number(score),
       checked: false,
-      persisted: true,
       numEpisodes,
     }
+    updateAnimeStore(newAnime)
 
     updateAnime(Number(id), newAnime)
       .then((result) => {
@@ -45,18 +45,15 @@ const useEditAnime = ({
           setSnackbarType('success')
           setSnackbarMessage('Anime updated successfully')
         } else {
-          newAnime.persisted = false
           setSnackbarType('error')
           setSnackbarMessage('Error updating anime')
         }
       })
       .catch(() => {
-        newAnime.persisted = false
         setSnackbarType('warning')
         setSnackbarMessage('Server is down, but anime updated locally')
       })
       .finally(() => {
-        updateAnimeStore(newAnime)
         setSnackbarOpen(true)
       })
   }

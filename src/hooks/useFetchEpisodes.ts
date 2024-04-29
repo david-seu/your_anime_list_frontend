@@ -22,10 +22,6 @@ const useFetchEpisodes = ({
     listEpisode(page)
       .then((result: { data: Episode[]; status: number }) => {
         if (result.status === 200) {
-          result.data.forEach((episode) => {
-            // eslint-disable-next-line no-param-reassign
-            episode.persisted = true
-          })
           setEpisodeStore(result.data)
           setSnackbarType('success')
           setSnackbarMessage('Successfully fetched episodes')

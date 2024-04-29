@@ -1,12 +1,27 @@
 import axios from 'axios'
+import * as rax from 'retry-axios'
 import Episode from '../data/Episode'
 
 const REST_API_BASE_URL = 'http://localhost:8081/api/episode'
 
+rax.attach()
+
 export const listEpisode = async (page: number) => {
-  const result = await axios.get(
-    `${REST_API_BASE_URL}/getAllEpisodes?page=${page}`
-  )
+  const result = await axios({
+    url: `${REST_API_BASE_URL}/getAllEpisodes?page=${page}`,
+    method: 'GET',
+    raxConfig: {
+      retry: 100,
+      noResponseRetries: 100,
+      httpMethodsToRetry: ['GET'],
+      retryDelay: 10000,
+      onRetryAttempt: (err) => {
+        const cfg = rax.getConfig(err)
+        console.log(`Retry attempt #${cfg?.currentRetryAttempt}`)
+      },
+    },
+  })
+
   return result
 }
 
@@ -19,12 +34,39 @@ export const addEpisode = async (episode: Episode) => {
     watched: episode.watched,
     animeTitle: episode.animeTitle,
   }
-  const result = await axios.post(`${REST_API_BASE_URL}/addEpisode`, data)
+  const result = await axios({
+    url: `${REST_API_BASE_URL}/addEpisode`,
+    method: 'POST',
+    data,
+    raxConfig: {
+      retry: 100,
+      noResponseRetries: 100,
+      httpMethodsToRetry: ['POST'],
+      retryDelay: 10000,
+      onRetryAttempt: (err) => {
+        const cfg = rax.getConfig(err)
+        console.log(`Retry attempt #${cfg?.currentRetryAttempt}`)
+      },
+    },
+  })
   return result
 }
 
 export const getEpisode = async (episodeId: number) => {
-  const result = await axios.get(`${REST_API_BASE_URL}/getEpisode/${episodeId}`)
+  const result = await axios({
+    url: `${REST_API_BASE_URL}/getEpisode/${episodeId}`,
+    method: 'GET',
+    raxConfig: {
+      retry: 100,
+      noResponseRetries: 100,
+      httpMethodsToRetry: ['GET'],
+      retryDelay: 10000,
+      onRetryAttempt: (err) => {
+        const cfg = rax.getConfig(err)
+        console.log(`Retry attempt #${cfg?.currentRetryAttempt}`)
+      },
+    },
+  })
   return result
 }
 
@@ -37,16 +79,38 @@ export const updateEpisode = async (episodeId: number, episode: Episode) => {
     watched: episode.watched,
     animeTitle: episode.animeTitle,
   }
-  const result = await axios.patch(
-    `${REST_API_BASE_URL}/updateEpisode/${episodeId}`,
-    data
-  )
+  const result = await axios({
+    url: `${REST_API_BASE_URL}/updateEpisode/${episodeId}`,
+    method: 'PUT',
+    data,
+    raxConfig: {
+      retry: 100,
+      noResponseRetries: 100,
+      httpMethodsToRetry: ['PUT'],
+      retryDelay: 10000,
+      onRetryAttempt: (err) => {
+        const cfg = rax.getConfig(err)
+        console.log(`Retry attempt #${cfg?.currentRetryAttempt}`)
+      },
+    },
+  })
   return result
 }
 
 export const deleteEpisode = async (episodeId: number) => {
-  const result = await axios.delete(
-    `${REST_API_BASE_URL}/deleteEpisode/${episodeId}`
-  )
+  const result = await axios({
+    method: 'DELETE',
+    url: `${REST_API_BASE_URL}/deleteEpisode/${episodeId}`,
+    raxConfig: {
+      retry: 100,
+      noResponseRetries: 100,
+      httpMethodsToRetry: ['DELETE'],
+      retryDelay: 10000,
+      onRetryAttempt: (err) => {
+        const cfg = rax.getConfig(err)
+        console.log(`Retry attempt #${cfg?.currentRetryAttempt}`)
+      },
+    },
+  })
   return result
 }
