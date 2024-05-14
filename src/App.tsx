@@ -7,11 +7,15 @@ import ViewAnime from './pages/ViewAnime'
 import AddEpisode from './pages/AddEpisode'
 import EditEpisode from './pages/EditEpisode'
 import ViewEpisode from './pages/ViewEpsiode'
+import Register from './pages/Register'
+import Login from './pages/Login'
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Login />} />
+      <Route path="/home" element={<Home />} />
+      <Route path="/register" element={<Register />} />
       <Route path="/addAnime" element={<AddAnime />} />
       <Route path="/editAnime/:id" element={<EditAnime />} />
       <Route path="/viewAnime/:id" element={<ViewAnime />} />
