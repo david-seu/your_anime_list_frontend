@@ -1,13 +1,14 @@
 /* eslint-disable import/no-named-as-default */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { AlertColor } from '@mui/material'
 import CustomizedSnackbars from '../components/CustomizedSnackBars'
 import LinkButton from '../components/LinkButton'
 import useFetchAnimeById from '../hooks/useFetchAnimeById'
 import EditAnimeForm from '../components/EditAnimeForm'
 import useEditAnime from '../hooks/useEditAnime'
+import useUserStore from '../store/useUserStore'
 
 export default function EditAnime(): JSX.Element {
   const [title, setTitle] = useState<string>('')
@@ -21,7 +22,17 @@ export default function EditAnime(): JSX.Element {
   const [snackbarType, setSnackbarType] = useState('')
   const [snackbarMessage, setSnackbarMessage] = useState('')
 
+  const user = useUserStore((state) => state.user)!
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/')
+    }
+  }, [user, navigate])
+
   useFetchAnimeById({
+    user,
     id,
     setTitle,
     setScore,
@@ -30,6 +41,7 @@ export default function EditAnime(): JSX.Element {
   })
 
   const handleSubmit = useEditAnime({
+    user,
     id,
     title,
     score,
@@ -42,7 +54,7 @@ export default function EditAnime(): JSX.Element {
 
   return (
     <div>
-      <LinkButton to="/">Back</LinkButton>
+      <LinkButton to="/home">Back</LinkButton>
       <div className="edit--container">
         <EditAnimeForm
           title={title}

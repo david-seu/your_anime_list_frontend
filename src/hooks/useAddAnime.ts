@@ -2,8 +2,10 @@ import { SetStateAction, Dispatch } from 'react'
 import Anime from '../data/Anime'
 import { useAnimeStore } from '../store/useAnimeStore'
 import { addAnime } from '../services/AnimeService'
+import User from '../data/User'
 
 interface UseAddAnimeProps {
+  user: User
   title: string
   score: number
   watched: boolean
@@ -13,6 +15,7 @@ interface UseAddAnimeProps {
 }
 
 const useAddAnime = ({
+  user,
   title,
   score,
   watched,
@@ -24,6 +27,7 @@ const useAddAnime = ({
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
+    if (!user) return
 
     const id = -1
 
@@ -36,8 +40,7 @@ const useAddAnime = ({
       numEpisodes: 0,
     }
     addAnimeStore(newAnime)
-
-    addAnime(newAnime)
+    addAnime(newAnime, user!.token)
       .then((result) => {
         if (result.status !== 201) {
           setSnackbarType('error')

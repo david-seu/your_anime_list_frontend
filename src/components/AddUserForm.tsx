@@ -4,7 +4,6 @@ interface AddUserFormProps {
   setUsername: (username: string) => void
   setPassword: (password: string) => void
   setEmail: (email: string) => void
-  setFullName: (fullName: string) => void
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
 
@@ -12,7 +11,6 @@ export default function AddAnimeForm({
   setUsername,
   setPassword,
   setEmail,
-  setFullName,
   handleSubmit,
 }: AddUserFormProps) {
   return (
@@ -33,15 +31,6 @@ export default function AddAnimeForm({
           placeholder="Enter email"
           required
           onChange={(e) => setEmail(e.target.value)}
-        />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formFullName">
-        <Form.Label>Full Name</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Enter full name"
-          required
-          onChange={(e) => setFullName(e.target.value)}
         />
       </Form.Group>
       <Form.Group className="mb-3" controlId="formPassword">

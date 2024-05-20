@@ -7,14 +7,14 @@ import LoginForm from '../components/LoginForm'
 import LinkButton from '../components/LinkButton'
 
 export default function Login() {
-  const [email, setEmail] = React.useState('')
+  const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarType, setSnackbarType] = useState('')
   const [snackbarMessage, setSnackbarMessage] = useState('')
 
   const handleSubmit = useLogin({
-    email,
+    username,
     password,
     setSnackbarOpen,
     setSnackbarType,
@@ -23,9 +23,10 @@ export default function Login() {
 
   return (
     <div>
+      <h1>Login</h1>
       <div className="add--container">
         <LoginForm
-          setEmail={setEmail}
+          setUsername={setUsername}
           setPassword={setPassword}
           handleSubmit={handleSubmit}
         />

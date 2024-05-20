@@ -2,8 +2,10 @@ import { SetStateAction, Dispatch } from 'react'
 import Episode from '../data/Episode'
 import { useEpisodeStore } from '../store/useEpisodeStore'
 import { addEpisode } from '../services/EpisodeService'
+import User from '../data/User'
 
 interface UseAddEpisodeProps {
+  user: User
   title: string
   number: number
   season: number
@@ -16,6 +18,7 @@ interface UseAddEpisodeProps {
 }
 
 const useAddEpisode = ({
+  user,
   title,
   number,
   season,
@@ -31,6 +34,7 @@ const useAddEpisode = ({
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
+    if (!user) return
 
     const id = -1
 
@@ -46,7 +50,7 @@ const useAddEpisode = ({
     }
     addEpisodeStore(newEpisode)
 
-    addEpisode(newEpisode)
+    addEpisode(newEpisode, user!.token)
       .then((result) => {
         if (result.status !== 201) {
           addEpisodeStore(newEpisode)

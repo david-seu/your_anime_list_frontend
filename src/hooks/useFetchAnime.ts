@@ -3,12 +3,14 @@ import Anime from '../data/Anime'
 import { listAnime } from '../services/AnimeService'
 // eslint-disable-next-line import/no-named-as-default
 import useAnimeStore from '../store/useAnimeStore'
+import User from '../data/User'
 
 interface UseFetchAnimeProps {
   setAnimeStore: (anime: Anime[]) => void
   setSnackbarType: (type: string) => void
   setSnackbarMessage: (message: string) => void
   setSnackbarOpen: (open: boolean) => void
+  user: User
 }
 
 const useFetchAnime = ({
@@ -16,10 +18,14 @@ const useFetchAnime = ({
   setSnackbarType,
   setSnackbarMessage,
   setSnackbarOpen,
+  user,
 }: UseFetchAnimeProps) => {
   const page = useAnimeStore((state) => state.page)
+
   useEffect(() => {
-    listAnime(page)
+    if (!user) return
+
+    listAnime(page, user!.token)
       .then((result: { data: Anime[]; status: number }) => {
         if (result.status === 200) {
           setAnimeStore(result.data)
@@ -49,6 +55,7 @@ const useFetchAnime = ({
     setSnackbarMessage,
     setSnackbarOpen,
     setSnackbarType,
+    user,
   ])
 }
 

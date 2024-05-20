@@ -3,8 +3,10 @@ import Episode from '../data/Episode'
 import { listEpisode } from '../services/EpisodeService'
 // eslint-disable-next-line import/no-named-as-default
 import useEpisodeStore from '../store/useEpisodeStore'
+import User from '../data/User'
 
 interface UseFetchEpisodesProps {
+  user: User
   setEpisodeStore: (episodes: Episode[]) => void
   setSnackbarType: (type: string) => void
   setSnackbarMessage: (message: string) => void
@@ -12,6 +14,7 @@ interface UseFetchEpisodesProps {
 }
 
 const useFetchEpisodes = ({
+  user,
   setEpisodeStore,
   setSnackbarType,
   setSnackbarMessage,
@@ -19,7 +22,9 @@ const useFetchEpisodes = ({
 }: UseFetchEpisodesProps) => {
   const page = useEpisodeStore((state) => state.page)
   useEffect(() => {
-    listEpisode(page)
+    if (!user) return
+
+    listEpisode(page, user!.token)
       .then((result: { data: Episode[]; status: number }) => {
         if (result.status === 200) {
           setEpisodeStore(result.data)
@@ -49,6 +54,7 @@ const useFetchEpisodes = ({
     setSnackbarMessage,
     setSnackbarOpen,
     page,
+    user,
   ])
 }
 

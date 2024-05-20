@@ -2,8 +2,10 @@ import { SetStateAction, Dispatch } from 'react'
 import Anime from '../data/Anime'
 import { useAnimeStore } from '../store/useAnimeStore'
 import { updateAnime } from '../services/AnimeService'
+import User from '../data/User'
 
 interface UseEditAnimeProps {
+  user: User
   id: string
   title: string
   score: number
@@ -15,6 +17,7 @@ interface UseEditAnimeProps {
 }
 
 const useEditAnime = ({
+  user,
   id,
   title,
   score,
@@ -28,6 +31,7 @@ const useEditAnime = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLButtonElement>): void => {
     e.preventDefault()
+    if (!user) return
 
     const newAnime: Anime = {
       id: Number(id),
@@ -39,7 +43,7 @@ const useEditAnime = ({
     }
     updateAnimeStore(newAnime)
 
-    updateAnime(Number(id), newAnime)
+    updateAnime(Number(id), newAnime, user!.token)
       .then((result) => {
         if (result.status === 200) {
           setSnackbarType('success')

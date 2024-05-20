@@ -1,8 +1,12 @@
 import { SetStateAction, Dispatch } from 'react'
-import { loginUser } from '../services/UserService'
+import { useNavigate } from 'react-router-dom'
+import { signin } from '../services/AuthService'
+// eslint-disable-next-line import/no-named-as-default
+import useUserStore from '../store/useUserStore'
+import User from '../data/User'
 
 interface UseLoginProps {
-  email: string
+  username: string
   password: string
   setSnackbarOpen: Dispatch<SetStateAction<boolean>>
   setSnackbarType: Dispatch<SetStateAction<string>>
@@ -10,15 +14,19 @@ interface UseLoginProps {
 }
 
 const useLogin = ({
-  email,
+  username,
   password,
   setSnackbarOpen,
   setSnackbarType,
   setSnackbarMessage,
 }: UseLoginProps) => {
+  const signIn = useUserStore((state) => state.signIn)
+  const navigate = useNavigate()
+
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
-    loginUser(email, password)
+
+    signin(username, password)
       .then((result) => {
         if (result.status === 400) {
           setSnackbarType('error')
@@ -30,6 +38,16 @@ const useLogin = ({
           setSnackbarType('error')
           setSnackbarMessage('User not found')
         } else {
+          const user: User = {
+            id: result.data.id,
+            username: result.data.username,
+            email: result.data.email,
+            token: result.data.token,
+            password: '',
+          }
+          console.log(user)
+          signIn(result.data)
+          navigate('/home')
           setSnackbarType('success')
           setSnackbarMessage('Successfully logged in')
         }

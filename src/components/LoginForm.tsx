@@ -1,29 +1,29 @@
 import { Form, Button } from 'react-bootstrap'
 
 interface LoginFormProps {
-  setEmail: (email: string) => void
+  setUsername: (username: string) => void
   setPassword: (password: string) => void
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
 
-export default function AddAnimeForm({
-  setEmail,
+export default function LoginForm({
+  setUsername,
   setPassword,
   handleSubmit,
 }: LoginFormProps) {
   return (
     <Form className="gap-2">
       <Form.Group className="mb-3" controlId="formEmail">
-        <Form.Label>Email</Form.Label>
+        <Form.Label>Username</Form.Label>
         <Form.Control
-          type="email"
-          placeholder="Enter email"
+          type="text"
+          placeholder="Enter username"
           required
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
         />
       </Form.Group>
       <Form.Group className="mb-3" controlId="formPassword">
-        <Form.Label>Score</Form.Label>
+        <Form.Label>Password</Form.Label>
         <Form.Control
           type="password"
           placeholder="Enter password"
@@ -32,7 +32,7 @@ export default function AddAnimeForm({
         />
       </Form.Group>
       <Button onClick={(e) => handleSubmit(e)} type="submit">
-        Submit
+        Login
       </Button>
     </Form>
   )

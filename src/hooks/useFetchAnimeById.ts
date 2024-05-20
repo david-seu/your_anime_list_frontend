@@ -1,8 +1,10 @@
 import { useEffect } from 'react'
 import { useAnimeStore } from '../store/useAnimeStore'
 import { getAnime } from '../services/AnimeService'
+import User from '../data/User'
 
 interface UseFetchAnimeByIdProps {
+  user: User
   id: string
   setTitle: (title: string) => void
   setScore: (score: number) => void
@@ -11,6 +13,7 @@ interface UseFetchAnimeByIdProps {
 }
 
 const useFetchAnimeById = ({
+  user,
   id,
   setTitle,
   setScore,
@@ -20,10 +23,12 @@ const useFetchAnimeById = ({
   const getAnimeStore = useAnimeStore((state) => state.getAnime)
 
   useEffect(() => {
+    if (!user) return
+
     if (id) {
       const anime = getAnimeStore(Number(id))
 
-      getAnime(Number(id))
+      getAnime(Number(id), user!.token)
         .then(
           (result: {
             data: {
@@ -48,7 +53,7 @@ const useFetchAnimeById = ({
           }
         })
     }
-  }, [id, getAnimeStore, setTitle, setScore, setWatched, setNumEpisodes])
+  }, [id, setTitle, setScore, setWatched, setNumEpisodes, getAnimeStore, user])
 }
 
 export default useFetchAnimeById

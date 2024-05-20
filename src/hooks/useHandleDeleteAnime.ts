@@ -6,8 +6,10 @@ import { deleteAnime } from '../services/AnimeService'
 import useEpisodeStore from '../store/useEpisodeStore'
 // eslint-disable-next-line import/no-named-as-default
 import useAnimeStore from '../store/useAnimeStore'
+import User from '../data/User'
 
 interface UseHandleDeleteAnimeProps {
+  user: User
   setSnackbarType: (type: string) => void
   setSnackbarMessage: (message: string) => void
   setSnackbarOpen: (open: boolean) => void
@@ -15,6 +17,7 @@ interface UseHandleDeleteAnimeProps {
 }
 
 const useHandleDeleteAnime = ({
+  user,
   setSnackbarType,
   setSnackbarMessage,
   setSnackbarOpen,
@@ -25,10 +28,12 @@ const useHandleDeleteAnime = ({
   const deleteAnimeStore = useAnimeStore((state) => state.deleteAnime)
 
   return useCallback(() => {
+    if (!user) return
+
     animeList.forEach(async (anime) => {
       if (anime.checked) {
         deleteAnimeStore(anime.id)
-        deleteAnime(anime.id)
+        deleteAnime(anime.id, user!.token)
           .then((result) => {
             if (result.status === 204) {
               setSnackbarType('success')
@@ -51,6 +56,7 @@ const useHandleDeleteAnime = ({
   }, [
     animeList,
     deleteAnimeStore,
+    user,
     setSnackbarType,
     setSnackbarMessage,
     setEpisodeStore,

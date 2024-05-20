@@ -4,12 +4,12 @@ import { AlertColor } from '@mui/material'
 import CustomizedSnackbars from '../components/CustomizedSnackBars'
 import useAddUser from '../hooks/useAddUser'
 import AddUserForm from '../components/AddUserForm'
+import LinkButton from '../components/LinkButton'
 
 export default function Register() {
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [email, setEmail] = React.useState('')
-  const [fullName, setFullName] = React.useState('')
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarType, setSnackbarType] = useState('')
   const [snackbarMessage, setSnackbarMessage] = useState('')
@@ -18,7 +18,6 @@ export default function Register() {
     username,
     password,
     email,
-    fullName,
     setSnackbarOpen,
     setSnackbarType,
     setSnackbarMessage,
@@ -26,12 +25,12 @@ export default function Register() {
 
   return (
     <div>
+      <LinkButton to="/">Back</LinkButton>
       <div className="add--container">
         <AddUserForm
           setUsername={setUsername}
           setPassword={setPassword}
           setEmail={setEmail}
-          setFullName={setFullName}
           handleSubmit={handleSubmit}
         />
         <CustomizedSnackbars

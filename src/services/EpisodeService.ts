@@ -2,14 +2,19 @@ import axios from 'axios'
 import * as rax from 'retry-axios'
 import Episode from '../data/Episode'
 
-const REST_API_BASE_URL = 'http://localhost:8081/api/episode'
+// const REST_API_BASE_URL = 'http://localhost:8081/api/episode'
 
+const REST_API_BASE_URL =
+  'https://mpp-david-spring-app-20240515142023.azuremicroservices.io/api/episode'
 rax.attach()
 
-export const listEpisode = async (page: number) => {
+export const listEpisode = async (page: number, token: string) => {
   const result = await axios({
     url: `${REST_API_BASE_URL}/getAllEpisodes?page=${page}`,
     method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     raxConfig: {
       retry: 100,
       noResponseRetries: 100,
@@ -25,7 +30,7 @@ export const listEpisode = async (page: number) => {
   return result
 }
 
-export const addEpisode = async (episode: Episode) => {
+export const addEpisode = async (episode: Episode, token: string) => {
   const data = {
     title: episode.title,
     number: episode.number,
@@ -37,6 +42,9 @@ export const addEpisode = async (episode: Episode) => {
   const result = await axios({
     url: `${REST_API_BASE_URL}/addEpisode`,
     method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     data,
     raxConfig: {
       retry: 100,
@@ -52,10 +60,13 @@ export const addEpisode = async (episode: Episode) => {
   return result
 }
 
-export const getEpisode = async (episodeId: number) => {
+export const getEpisode = async (episodeId: number, token: string) => {
   const result = await axios({
     url: `${REST_API_BASE_URL}/getEpisode/${episodeId}`,
     method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     raxConfig: {
       retry: 100,
       noResponseRetries: 100,
@@ -70,7 +81,11 @@ export const getEpisode = async (episodeId: number) => {
   return result
 }
 
-export const updateEpisode = async (episodeId: number, episode: Episode) => {
+export const updateEpisode = async (
+  episodeId: number,
+  episode: Episode,
+  token: string
+) => {
   const data = {
     title: episode.title,
     number: episode.number,
@@ -82,6 +97,9 @@ export const updateEpisode = async (episodeId: number, episode: Episode) => {
   const result = await axios({
     url: `${REST_API_BASE_URL}/updateEpisode/${episodeId}`,
     method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     data,
     raxConfig: {
       retry: 100,
@@ -97,10 +115,13 @@ export const updateEpisode = async (episodeId: number, episode: Episode) => {
   return result
 }
 
-export const deleteEpisode = async (episodeId: number) => {
+export const deleteEpisode = async (episodeId: number, token: string) => {
   const result = await axios({
-    method: 'DELETE',
     url: `${REST_API_BASE_URL}/deleteEpisode/${episodeId}`,
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     raxConfig: {
       retry: 100,
       noResponseRetries: 100,

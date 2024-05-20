@@ -1,8 +1,9 @@
-import { useState } from 'react'
-import { useParams } from 'react-router-dom'
-// eslint-disable-next-line import/no-named-as-default
+/* eslint-disable import/no-named-as-default */
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import LinkButton from '../components/LinkButton'
 import useFetchEpisodeById from '../hooks/useFetchEpisodeById'
+import useUserStore from '../store/useUserStore'
 
 function ViewEpisode(): JSX.Element {
   const [title, setTitle] = useState<string>('')
@@ -13,8 +14,17 @@ function ViewEpisode(): JSX.Element {
   const [animeTitle, setAnimeTitle] = useState('')
 
   const { id } = useParams<{ id: string }>() as unknown as { id: string }
+  const user = useUserStore((state) => state.user)!
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/')
+    }
+  }, [user, navigate])
 
   useFetchEpisodeById({
+    user,
     id,
     setTitle,
     setNumber,
@@ -26,7 +36,7 @@ function ViewEpisode(): JSX.Element {
 
   return (
     <div>
-      <LinkButton to="/">Back</LinkButton>
+      <LinkButton to="/home">Back</LinkButton>
       <LinkButton to={`/editEpisode/${id}`}>Edit</LinkButton>
       <div className="view--container">
         <h1>{title}</h1>
