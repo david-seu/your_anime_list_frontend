@@ -2,9 +2,9 @@ import axios from 'axios'
 import * as rax from 'retry-axios'
 import Anime from '../data/Anime'
 
-// const REST_API_BASE_URL = 'http://localhost:8081/api/anime'
-const REST_API_BASE_URL =
-  'https://mpp-david-spring-app-20240515142023.azuremicroservices.io/api/anime'
+const REST_API_BASE_URL = 'http://localhost:8081/api/anime'
+// const REST_API_BASE_URL =
+//   'https://mpp-david-spring-app-20240515142023.azuremicroservices.io/api/anime'
 
 rax.attach()
 

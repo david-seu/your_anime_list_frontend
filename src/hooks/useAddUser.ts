@@ -41,9 +41,10 @@ const useAddUser = ({
           setSnackbarType('error')
           setSnackbarMessage('Failed to add user')
         } else {
-          navigate('/')
           setSnackbarType('success')
           setSnackbarMessage('Successfully added user')
+          setSnackbarOpen(true)
+          navigate('/register/confirm')
         }
       })
       .catch(() => {

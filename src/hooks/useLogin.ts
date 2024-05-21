@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { signin } from '../services/AuthService'
 // eslint-disable-next-line import/no-named-as-default
 import useUserStore from '../store/useUserStore'
-import User from '../data/User'
 
 interface UseLoginProps {
   username: string
@@ -38,23 +37,20 @@ const useLogin = ({
           setSnackbarType('error')
           setSnackbarMessage('User not found')
         } else {
-          const user: User = {
-            id: result.data.id,
-            username: result.data.username,
-            email: result.data.email,
-            token: result.data.token,
-            password: '',
-          }
-          console.log(user)
           signIn(result.data)
-          navigate('/home')
-          setSnackbarType('success')
-          setSnackbarMessage('Successfully logged in')
+          setSnackbarType('warning')
+          setSnackbarMessage('2 Factor Authentication required to log')
+          navigate('/confirm')
         }
       })
-      .catch(() => {
-        setSnackbarType('warning')
-        setSnackbarMessage('Server is down, please try again later')
+      .catch((error) => {
+        if (error.response.status === 403) {
+          setSnackbarType('error')
+          setSnackbarMessage(error.response.data)
+        } else {
+          setSnackbarType('warning')
+          setSnackbarMessage('Server is down, please try again later')
+        }
       })
       .finally(() => {
         setSnackbarOpen(true)

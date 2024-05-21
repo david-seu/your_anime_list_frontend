@@ -2,10 +2,10 @@ import axios from 'axios'
 import * as rax from 'retry-axios'
 import Episode from '../data/Episode'
 
-// const REST_API_BASE_URL = 'http://localhost:8081/api/episode'
+const REST_API_BASE_URL = 'http://localhost:8081/api/episode'
 
-const REST_API_BASE_URL =
-  'https://mpp-david-spring-app-20240515142023.azuremicroservices.io/api/episode'
+// const REST_API_BASE_URL =
+//   'https://mpp-david-spring-app-20240515142023.azuremicroservices.io/api/episode'
 rax.attach()
 
 export const listEpisode = async (page: number, token: string) => {
