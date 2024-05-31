@@ -1,12 +1,13 @@
 import { SetStateAction, Dispatch } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { signup } from '../services/AuthService'
+import useUserStore from '../store/useUserStore'
 import User from '../data/User'
+import { addUser } from '../services/UserService'
 
-interface UseAddUserProps {
+interface UseAddAnimeProps {
   username: string
-  password: string
   email: string
+  password: string
+  role: string
   setSnackbarOpen: Dispatch<SetStateAction<boolean>>
   setSnackbarType: Dispatch<SetStateAction<string>>
   setSnackbarMessage: Dispatch<SetStateAction<string>>
@@ -14,42 +15,51 @@ interface UseAddUserProps {
 
 const useAddUser = ({
   username,
-  password,
   email,
+  password,
+  role,
   setSnackbarOpen,
   setSnackbarType,
   setSnackbarMessage,
-}: UseAddUserProps) => {
-  const navigate = useNavigate()
+}: UseAddAnimeProps) => {
+  const addUserStore = useUserStore((state) => state.addUser)
+  const user = useUserStore((state) => state.currentUser)!
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
 
-    const id = -1
+    if (!user) return
 
     const newUser: User = {
-      id,
+      id: -1,
       username,
-      password,
       email,
+      password,
+      role: `ROLE_${role.toUpperCase}`,
+      checked: false,
       token: '',
+      enabled: false,
     }
-
-    signup(newUser)
+    addUser(newUser, user!.token)
       .then((result) => {
-        if (result.status === 404) {
+        if (result.status !== 201) {
           setSnackbarType('error')
           setSnackbarMessage('Failed to add user')
         } else {
+          addUserStore(newUser)
           setSnackbarType('success')
           setSnackbarMessage('Successfully added user')
-          setSnackbarOpen(true)
-          navigate('/register/confirm')
         }
       })
-      .catch(() => {
-        setSnackbarType('warning')
-        setSnackbarMessage('Server is down, please try again later')
+      .catch((error) => {
+        if (error.response.status === 400) {
+          setSnackbarType('error')
+          setSnackbarMessage(error.response.data)
+        } else {
+          addUserStore(newUser)
+          setSnackbarType('warning')
+          setSnackbarMessage('Server is down, but user added locally')
+        }
       })
       .finally(() => {
         setSnackbarOpen(true)

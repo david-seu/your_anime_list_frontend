@@ -3,6 +3,7 @@ import Anime from '../data/Anime'
 import { useAnimeStore } from '../store/useAnimeStore'
 import { updateAnime } from '../services/AnimeService'
 import User from '../data/User'
+import useUserStore from '../store/useUserStore'
 
 interface UseEditAnimeProps {
   user: User
@@ -28,10 +29,11 @@ const useEditAnime = ({
   setSnackbarMessage,
 }: UseEditAnimeProps) => {
   const updateAnimeStore = useAnimeStore((state) => state.updateAnime)
+  const currentUser = useUserStore((state) => state.currentUser)!
 
   const handleSubmit = (e: React.FormEvent<HTMLButtonElement>): void => {
     e.preventDefault()
-    if (!user) return
+    if (!currentUser) return
 
     const newAnime: Anime = {
       id: Number(id),
@@ -40,10 +42,11 @@ const useEditAnime = ({
       score: Number(score),
       checked: false,
       numEpisodes,
+      user,
     }
     updateAnimeStore(newAnime)
 
-    updateAnime(Number(id), newAnime, user!.token)
+    updateAnime(newAnime, currentUser!.token)
       .then((result) => {
         if (result.status === 200) {
           setSnackbarType('success')

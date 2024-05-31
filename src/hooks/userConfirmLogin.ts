@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { Dispatch, SetStateAction } from 'react'
 import { confirmLogin } from '../services/AuthService'
 import useUserStore from '../store/useUserStore'
+import User from '../data/User'
 
 interface UseConfirmLoginProps {
   code: number
@@ -26,7 +27,16 @@ const useConfirmLogin = ({
     confirmLogin(code)
       .then((result) => {
         if (result.status === 200) {
-          signIn(result.data)
+          const user: User = {
+            id: result.data.id,
+            username: result.data.username,
+            email: result.data.email,
+            role: result.data.role,
+            enabled: true,
+            password: '',
+            token: result.data.token,
+          }
+          signIn(user)
           setSnackbarType('success')
           setSnackbarMessage('User logged successfully')
           setSnackbarOpen(true)

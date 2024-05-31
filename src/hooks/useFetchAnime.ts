@@ -1,38 +1,41 @@
-import { useEffect } from 'react'
 import Anime from '../data/Anime'
-import { listAnime } from '../services/AnimeService'
+import { fetchAnime } from '../services/AnimeService'
 // eslint-disable-next-line import/no-named-as-default
 import useAnimeStore from '../store/useAnimeStore'
-import User from '../data/User'
+// eslint-disable-next-line import/no-named-as-default
+import useUserStore from '../store/useUserStore'
 
 interface UseFetchAnimeProps {
-  setAnimeStore: (anime: Anime[]) => void
   setSnackbarType: (type: string) => void
   setSnackbarMessage: (message: string) => void
   setSnackbarOpen: (open: boolean) => void
-  user: User
 }
 
 const useFetchAnime = ({
-  setAnimeStore,
   setSnackbarType,
   setSnackbarMessage,
   setSnackbarOpen,
-  user,
 }: UseFetchAnimeProps) => {
+  const user = useUserStore((state) => state.currentUser)!
   const page = useAnimeStore((state) => state.page)
+  const setAnimeStore = useAnimeStore((state) => state.setAnimeList)
+  const setHasMoreStore = useAnimeStore((state) => state.setHasMore)
+  const title = useAnimeStore((state) => state.title)
+  const sort = useAnimeStore((state) => state.sort)
 
-  useEffect(() => {
+  const getAnime = () => {
     if (!user) return
-
-    listAnime(page, user!.token)
+    fetchAnime(page, title, user!.token, sort)
       .then((result: { data: Anime[]; status: number }) => {
         if (result.status === 200) {
           setAnimeStore(result.data)
+          if (result.data.length < 10) setHasMoreStore(false)
+          else setHasMoreStore(true)
           setSnackbarType('success')
           setSnackbarMessage('Successfully fetched anime')
         } else if (result.status === 204) {
           setAnimeStore([])
+          setHasMoreStore(false)
           setSnackbarType('info')
           setSnackbarMessage('No anime found')
         }
@@ -49,14 +52,8 @@ const useFetchAnime = ({
       .finally(() => {
         setSnackbarOpen(true)
       })
-  }, [
-    page,
-    setAnimeStore,
-    setSnackbarMessage,
-    setSnackbarOpen,
-    setSnackbarType,
-    user,
-  ])
+  }
+  return getAnime
 }
 
 export default useFetchAnime

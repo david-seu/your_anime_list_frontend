@@ -1,28 +1,24 @@
-import { useCallback } from 'react'
-import Episode from '../data/Episode'
 import { deleteEpisode } from '../services/EpisodeService'
 // eslint-disable-next-line import/no-named-as-default
 import useEpisodeStore from '../store/useEpisodeStore'
-import User from '../data/User'
+import useUserStore from '../store/useUserStore'
 
 interface UseHandleDeleteEpisodeProps {
-  user: User
   setSnackbarType: (type: string) => void
   setSnackbarMessage: (message: string) => void
   setSnackbarOpen: (open: boolean) => void
-  episodeList: Episode[]
 }
 
 const useHandleDeleteEpisode = ({
-  user,
   setSnackbarType,
   setSnackbarMessage,
   setSnackbarOpen,
-  episodeList,
 }: UseHandleDeleteEpisodeProps) => {
   const deleteEpisodeStore = useEpisodeStore((state) => state.deleteEpisode)
+  const episodeList = useEpisodeStore((state) => state.getAllEpisodes)()
+  const user = useUserStore((state) => state.currentUser)!
 
-  return useCallback(() => {
+  const handleDeleteEpisode = () => {
     if (!user) return
 
     episodeList.forEach(async (episode) => {
@@ -48,14 +44,8 @@ const useHandleDeleteEpisode = ({
           })
       }
     })
-  }, [
-    episodeList,
-    deleteEpisodeStore,
-    user,
-    setSnackbarType,
-    setSnackbarMessage,
-    setSnackbarOpen,
-  ])
+  }
+  return handleDeleteEpisode
 }
 
 export default useHandleDeleteEpisode

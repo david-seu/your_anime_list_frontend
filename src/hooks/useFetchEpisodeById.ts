@@ -2,10 +2,9 @@ import { useEffect } from 'react'
 // eslint-disable-next-line import/no-named-as-default
 import useEpisodeStore from '../store/useEpisodeStore'
 import { getEpisode } from '../services/EpisodeService'
-import User from '../data/User'
+import useUserStore from '../store/useUserStore'
 
 interface UseFetchEpisdeByIdProps {
-  user: User
   id: string
   setTitle: (title: string) => void
   setNumber: (number: number) => void
@@ -16,7 +15,6 @@ interface UseFetchEpisdeByIdProps {
 }
 
 const useFetchEpisodeById = ({
-  user,
   id,
   setTitle,
   setNumber,
@@ -26,6 +24,7 @@ const useFetchEpisodeById = ({
   setAnimeTitle,
 }: UseFetchEpisdeByIdProps) => {
   const getEpisodeStore = useEpisodeStore((state) => state.getEpisode)
+  const user = useUserStore((state) => state.currentUser)
 
   useEffect(() => {
     if (!user) return

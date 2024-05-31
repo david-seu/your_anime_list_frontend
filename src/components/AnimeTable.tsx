@@ -1,130 +1,132 @@
-import { Link } from 'react-router-dom'
 import { Table } from 'react-bootstrap'
-// import {
-//   DataGrid,
-//   GRID_CHECKBOX_SELECTION_COL_DEF,
-//   GridColDef,
-//   GridEventListener,
-// } from '@mui/x-data-grid'
-// import { useNavigate } from 'react-router-dom'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import { useEffect, useState } from 'react'
+import { AlertColor } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 import Anime from '../data/Anime'
-// eslint-disable-next-line import/no-named-as-default
 import useAnimeStore from '../store/useAnimeStore'
-import HandlerButton from './HandlerButton'
+import useFetchAnime from '../hooks/useFetchAnime'
+import CustomizedSnackbars from './CustomizedSnackBars'
+import Loader from './Loader'
+import useUserStore from '../store/useUserStore'
+import useFetchMoreAnime from '../hooks/useFetchMoreAnime'
 
-interface AnimeTableProps {
-  animeList: Anime[]
-}
-
-export default function AnimeTable({ animeList }: AnimeTableProps) {
+export default function AnimeTable() {
+  const animeList = useAnimeStore((state) => state.animeList)
   const updateAnimeStore = useAnimeStore((state) => state.updateAnime)
-  const nextPage = useAnimeStore((state) => state.nextPage)
-  const previousPage = useAnimeStore((state) => state.prevPage)
+  const hasMore = useAnimeStore((state) => state.hasMore)
+  const user = useUserStore((state) => state.currentUser)
+  const navigate = useNavigate()
 
-  const handleNextPage = () => {
-    nextPage()
-  }
-  const handlePreviousPage = () => {
-    previousPage()
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarType, setSnackbarType] = useState('')
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const title = useAnimeStore((state) => state.title)
+  const setTitleStore = useAnimeStore((state) => state.setTitle)
+  const setPageStoreAnime = useAnimeStore((state) => state.setPage)
+  const setHasMoreStore = useAnimeStore((state) => state.setHasMore)
+  const setAnimeListStore = useAnimeStore((state) => state.setAnimeList)
+  const sort = useAnimeStore((state) => state.sort)
+  const setSortStore = useAnimeStore((state) => state.setSort)
+
+  const fetchAnime = useFetchAnime({
+    setSnackbarType,
+    setSnackbarMessage,
+    setSnackbarOpen,
+  })
+
+  useEffect(() => {
+    setAnimeListStore([])
+    setTitleStore('')
+    setSortStore('DESC')
+    setPageStoreAnime(0)
+    setHasMoreStore(true)
+    fetchAnime()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    setPageStoreAnime(0)
+    setHasMoreStore(true)
+    fetchAnime()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [title, sort])
+
+  const fetchMoreData = useFetchMoreAnime({
+    setSnackbarType,
+    setSnackbarMessage,
+    setSnackbarOpen,
+  })
+
+  const handleDoubleClick = (anime: Anime) => {
+    if (user?.role === 'ROLE_ADMIN') {
+      navigate(`/viewAnime/${anime.id}`)
+    } else if (user?.role === 'ROLE_MANAGER' && anime.user?.id === user.id) {
+      navigate(`/viewAnime/${anime.id}`)
+    }
   }
 
   return (
     <div>
-      <Table striped bordered hover size="sm">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Watched</th>
-            <th>Score</th>
-            <th>Number of Episodes</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {animeList.map((anime: Anime) => {
-            return (
-              <tr key={anime.id}>
-                <td>{anime.title}</td>
-                <td>{anime.watched ? 'Yes' : 'No'}</td>
-                <td>{anime.score > 0 ? anime.score : 'N/A'}</td>
-                <td>{anime.numEpisodes}</td>
-                <td key={anime.id} className="button-container">
-                  <Link to={`/editAnime/${anime.id}`}>
-                    <button type="button" className="btn btn-primary">
-                      Edit
-                    </button>
-                  </Link>
-                  <Link to={`/viewAnime/${anime.id}`}>
-                    <button type="button" className="btn btn-primary">
-                      View
-                    </button>
-                  </Link>
-                  <input
-                    type="checkbox"
-                    onChange={(e) => {
-                      // eslint-disable-next-line no-param-reassign
-                      anime.checked = e.target.checked
-                      updateAnimeStore(anime)
-                    }}
-                  />
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </Table>
-      <HandlerButton onClick={handlePreviousPage}>Previous</HandlerButton>
-      <HandlerButton onClick={handleNextPage}>Next</HandlerButton>
+      <InfiniteScroll
+        dataLength={animeList.length}
+        next={fetchMoreData}
+        hasMore={hasMore}
+        loader={<Loader />}
+        endMessage={
+          <p style={{ textAlign: 'center' }}>
+            <b>Yay! You have seen it all</b>
+          </p>
+        }
+        height={500}
+      >
+        <Table striped bordered hover size="sm">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Watched</th>
+              <th>Score</th>
+              <th>Number of Episodes</th>
+              <th>User</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {animeList.map((anime: Anime, index: number) => {
+              return (
+                <tr
+                  key={anime.id}
+                  onDoubleClick={() => handleDoubleClick(anime)}
+                >
+                  <td>{index + 1}</td>
+                  <td>{anime.title}</td>
+                  <td>{anime.watched ? 'Yes' : 'No'}</td>
+                  <td>{anime.score > 0 ? anime.score : 'N/A'}</td>
+                  <td>{anime.numEpisodes}</td>
+                  <td>{anime.user?.username}</td>
+                  <td className="button-container">
+                    <input
+                      type="checkbox"
+                      onChange={(e) => {
+                        // eslint-disable-next-line no-param-reassign
+                        anime.checked = e.target.checked
+                        updateAnimeStore(anime)
+                      }}
+                    />
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </Table>
+      </InfiniteScroll>
+      <CustomizedSnackbars
+        open={snackbarOpen}
+        type={snackbarType as AlertColor}
+        message={snackbarMessage}
+        handleClose={() => setSnackbarOpen(false)}
+      />
     </div>
   )
 }
-
-// const columns: GridColDef[] = [
-//   { field: 'id', headerName: 'ID', hideable: false },
-//   { field: 'title', headerName: 'Title', width: 300 },
-//   { field: 'score', headerName: 'Score', type: 'number', width: 90 },
-//   { field: 'watched', headerName: 'Watched', width: 70 },
-// ]
-
-// interface AnimeTableProps {
-//   animeList: Anime[]
-// }
-
-// export default function AnimeTable({ animeList }: AnimeTableProps) {
-//   const navigate = useNavigate()
-//   const setIdList = useAnimeStore((state) => state.setIdList)
-
-//   const handleRowClick: GridEventListener<'rowClick'> = (params) => {
-//     const animeId = params.row.id
-//     navigate(`/viewAnime/${animeId}`)
-//   }
-
-//   const [paginationModel, setPaginationModel] = React.useState({
-//     page: 0,
-//     pageSize: 10,
-//   })
-
-//   return (
-//     <div style={{ height: 400, width: 600 }}>
-//       <DataGrid
-//         rows={animeList}
-//         rowCount={rowCount}
-//         columns={columns}
-//         paginationMode="server"
-//         columnVisibilityModel={{
-//           id: false,
-//         }}
-//         pageSizeOptions={[10]}
-//         checkboxSelection
-//         onRowDoubleClick={handleRowClick}
-//         onRowSelectionModelChange={(ids) => {
-//           setIdList(ids as number[])
-//         }}
-//         disableRowSelectionOnClick
-//         disableColumnResize
-//         disableColumnFilter
-//         disableColumnMenu
-//       />
-//     </div>
-//   )
-// }

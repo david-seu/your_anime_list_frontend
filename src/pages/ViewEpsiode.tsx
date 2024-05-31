@@ -5,7 +5,7 @@ import LinkButton from '../components/LinkButton'
 import useFetchEpisodeById from '../hooks/useFetchEpisodeById'
 import useUserStore from '../store/useUserStore'
 
-function ViewEpisode(): JSX.Element {
+export default function ViewEpisode(): JSX.Element {
   const [title, setTitle] = useState<string>('')
   const [number, setNumber] = useState<number>(0)
   const [season, setSeason] = useState<number>(0)
@@ -14,7 +14,7 @@ function ViewEpisode(): JSX.Element {
   const [animeTitle, setAnimeTitle] = useState('')
 
   const { id } = useParams<{ id: string }>() as unknown as { id: string }
-  const user = useUserStore((state) => state.user)!
+  const user = useUserStore((state) => state.currentUser)!
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -24,7 +24,6 @@ function ViewEpisode(): JSX.Element {
   }, [user, navigate])
 
   useFetchEpisodeById({
-    user,
     id,
     setTitle,
     setNumber,
@@ -49,5 +48,3 @@ function ViewEpisode(): JSX.Element {
     </div>
   )
 }
-
-export default ViewEpisode

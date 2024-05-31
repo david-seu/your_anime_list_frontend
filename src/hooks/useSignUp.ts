@@ -1,50 +1,58 @@
 import { SetStateAction, Dispatch } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { signin } from '../services/AuthService'
-// eslint-disable-next-line import/no-named-as-default
-import useUserStore from '../store/useUserStore'
+import { signup } from '../services/AuthService'
+import User from '../data/User'
 
-interface UseLoginProps {
+interface UseSignUpProps {
   username: string
   password: string
+  email: string
+  role: string
   setSnackbarOpen: Dispatch<SetStateAction<boolean>>
   setSnackbarType: Dispatch<SetStateAction<string>>
   setSnackbarMessage: Dispatch<SetStateAction<string>>
 }
 
-const useLogin = ({
+const useSignUp = ({
   username,
   password,
+  email,
+  role,
   setSnackbarOpen,
   setSnackbarType,
   setSnackbarMessage,
-}: UseLoginProps) => {
-  const signIn = useUserStore((state) => state.signIn)
+}: UseSignUpProps) => {
   const navigate = useNavigate()
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
 
-    signin(username, password)
+    const id = -1
+
+    const newUser: User = {
+      id,
+      username,
+      password,
+      email,
+      token: '',
+      role,
+      enabled: false,
+    }
+
+    signup(newUser)
       .then((result) => {
-        if (result.status === 400) {
+        if (result.status === 404) {
           setSnackbarType('error')
-          setSnackbarMessage('Failed to login')
-        } else if (result.status === 401) {
-          setSnackbarType('error')
-          setSnackbarMessage('Invalid password')
-        } else if (result.status === 404) {
-          setSnackbarType('error')
-          setSnackbarMessage('User not found')
+          setSnackbarMessage('Failed to add user')
         } else {
-          signIn(result.data)
-          setSnackbarType('warning')
-          setSnackbarMessage('2 Factor Authentication required to log')
-          navigate('/confirm')
+          setSnackbarType('success')
+          setSnackbarMessage('Successfully added user')
+          setSnackbarOpen(true)
+          navigate('/register/confirm')
         }
       })
       .catch((error) => {
-        if (error.response.status === 403) {
+        if (error.response.status === 400) {
           setSnackbarType('error')
           setSnackbarMessage(error.response.data)
         } else {
@@ -60,4 +68,4 @@ const useLogin = ({
   return handleSubmit
 }
 
-export default useLogin
+export default useSignUp

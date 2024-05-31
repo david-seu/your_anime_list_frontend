@@ -1,26 +1,11 @@
-import { useEffect, useState } from 'react'
-import { AlertColor } from '@mui/material'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import CustomizedSnackbars from '../components/CustomizedSnackBars'
 import ConfirmLoginForm from '../components/ConfirmLoginForm'
-import useConfirmLogin from '../hooks/userConfirmLogin'
-// eslint-disable-next-line import/no-named-as-default
 import useUserStore from '../store/useUserStore'
+import LinkButton from '../components/LinkButton'
 
 export default function ConfirmLogin() {
-  const [code, setCode] = useState(0)
-  const [snackbarOpen, setSnackbarOpen] = useState(false)
-  const [snackbarType, setSnackbarType] = useState('')
-  const [snackbarMessage, setSnackbarMessage] = useState('')
-
-  const handleSubmit = useConfirmLogin({
-    code,
-    setSnackbarOpen,
-    setSnackbarType,
-    setSnackbarMessage,
-  })
-
-  const user = useUserStore((state) => state.user)!
+  const user = useUserStore((state) => state.currentUser)!
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -31,13 +16,8 @@ export default function ConfirmLogin() {
 
   return (
     <div>
-      <ConfirmLoginForm setCode={setCode} handleSubmit={handleSubmit} />
-      <CustomizedSnackbars
-        open={snackbarOpen}
-        type={snackbarType as AlertColor}
-        message={snackbarMessage}
-        handleClose={() => setSnackbarOpen(false)}
-      />
+      <LinkButton to="/">Back</LinkButton>
+      <ConfirmLoginForm />
     </div>
   )
 }

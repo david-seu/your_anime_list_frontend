@@ -2,10 +2,9 @@ import { SetStateAction, Dispatch } from 'react'
 import Episode from '../data/Episode'
 import { useEpisodeStore } from '../store/useEpisodeStore'
 import { addEpisode } from '../services/EpisodeService'
-import User from '../data/User'
+import useUserStore from '../store/useUserStore'
 
 interface UseAddEpisodeProps {
-  user: User
   title: string
   number: number
   season: number
@@ -18,7 +17,6 @@ interface UseAddEpisodeProps {
 }
 
 const useAddEpisode = ({
-  user,
   title,
   number,
   season,
@@ -31,6 +29,7 @@ const useAddEpisode = ({
 }: UseAddEpisodeProps) => {
   const addEpisodeStore = useEpisodeStore((state) => state.addEpisode)
   const deleteEpisodeStore = useEpisodeStore((state) => state.deleteEpisode)
+  const user = useUserStore((state) => state.currentUser)!
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()

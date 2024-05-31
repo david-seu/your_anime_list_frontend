@@ -1,3 +1,5 @@
+import User from './User'
+
 interface Anime {
   id: number
   title: string
@@ -5,6 +7,7 @@ interface Anime {
   score: number
   numEpisodes: number
   checked: boolean
+  user: User | null
 }
 
 export default Anime

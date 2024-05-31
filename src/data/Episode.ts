@@ -1,3 +1,5 @@
+import Anime from './Anime'
+
 interface Episode {
   id: number
   title: string
@@ -7,6 +9,7 @@ interface Episode {
   checked: boolean
   watched: boolean
   animeTitle: string
+  anime: Anime | null
 }
 
 export default Episode

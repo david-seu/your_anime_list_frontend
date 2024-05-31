@@ -7,18 +7,22 @@ import ViewAnime from './pages/ViewAnime'
 import AddEpisode from './pages/AddEpisode'
 import EditEpisode from './pages/EditEpisode'
 import ViewEpisode from './pages/ViewEpsiode'
-import Register from './pages/Register'
-import Login from './pages/Login'
+import SingUp from './pages/SignUp'
+import SignIn from './pages/SignIn'
 import ConfirmRegister from './pages/ConfirmRegister'
 import ConfirmLogin from './pages/ConfirmLogin'
+import AddUser from './pages/AddUser'
+import EditUser from './pages/EditUser'
+import ViewUser from './pages/ViewUser'
+import Stats from './pages/Stats'
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route path="/" element={<SignIn />} />
       <Route path="/confirm" element={<ConfirmLogin />} />
       <Route path="/home" element={<Home />} />
-      <Route path="/register" element={<Register />} />
+      <Route path="/register" element={<SingUp />} />
       <Route path="/register/confirm" element={<ConfirmRegister />} />
       <Route path="/addAnime" element={<AddAnime />} />
       <Route path="/editAnime/:id" element={<EditAnime />} />
@@ -26,6 +30,10 @@ function App() {
       <Route path="/addEpisode" element={<AddEpisode />} />
       <Route path="/editEpisode/:id" element={<EditEpisode />} />
       <Route path="/viewEpisode/:id" element={<ViewEpisode />} />
+      <Route path="/addUser" element={<AddUser />} />
+      <Route path="/editUser/:id" element={<EditUser />} />
+      <Route path="/viewUser/:id" element={<ViewUser />} />
+      <Route path="/stats" element={<Stats />} />
       <Route path="*" element={<div>404 Not Found</div>} />
     </Routes>
   )

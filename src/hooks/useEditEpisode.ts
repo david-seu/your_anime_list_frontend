@@ -2,10 +2,9 @@ import { Dispatch, SetStateAction } from 'react'
 import { useEpisodeStore } from '../store/useEpisodeStore'
 import { updateEpisode } from '../services/EpisodeService'
 import Episode from '../data/Episode'
-import User from '../data/User'
+import useUserStore from '../store/useUserStore'
 
 interface UseEditEpisodeProps {
-  user: User
   id: string
   title: string
   number: number
@@ -19,7 +18,6 @@ interface UseEditEpisodeProps {
 }
 
 const useEditEpisode = ({
-  user,
   id,
   title,
   number,
@@ -32,6 +30,7 @@ const useEditEpisode = ({
   setSnackbarMessage,
 }: UseEditEpisodeProps) => {
   const updateEpisodeStore = useEpisodeStore((state) => state.updateEpisode)
+  const user = useUserStore((state) => state.currentUser)
 
   const handleSubmit = (e: React.FormEvent<HTMLButtonElement>): void => {
     e.preventDefault()
@@ -46,10 +45,11 @@ const useEditEpisode = ({
       score: Number(score),
       checked: false,
       animeTitle,
+      anime: null,
     }
     updateEpisodeStore(newEpisode)
 
-    updateEpisode(Number(id), newEpisode, user!.token)
+    updateEpisode(newEpisode, user!.token)
       .then((result) => {
         if (result.status === 200) {
           setSnackbarType('success')

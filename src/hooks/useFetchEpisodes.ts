@@ -1,37 +1,39 @@
-import { useEffect } from 'react'
 import Episode from '../data/Episode'
-import { listEpisode } from '../services/EpisodeService'
-// eslint-disable-next-line import/no-named-as-default
+import { fetchEpisode } from '../services/EpisodeService'
 import useEpisodeStore from '../store/useEpisodeStore'
-import User from '../data/User'
+import useUserStore from '../store/useUserStore'
 
 interface UseFetchEpisodesProps {
-  user: User
-  setEpisodeStore: (episodes: Episode[]) => void
   setSnackbarType: (type: string) => void
   setSnackbarMessage: (message: string) => void
   setSnackbarOpen: (open: boolean) => void
 }
 
 const useFetchEpisodes = ({
-  user,
-  setEpisodeStore,
   setSnackbarType,
   setSnackbarMessage,
   setSnackbarOpen,
 }: UseFetchEpisodesProps) => {
   const page = useEpisodeStore((state) => state.page)
-  useEffect(() => {
-    if (!user) return
+  const setEpisodeStore = useEpisodeStore((state) => state.setEpisodeList)
+  const user = useUserStore((state) => state.currentUser)!
+  const title = useEpisodeStore((state) => state.title)
+  const setHasMore = useEpisodeStore((state) => state.setHasMore)
+  const sort = useEpisodeStore((state) => state.sort)
 
-    listEpisode(page, user!.token)
+  const getEpisodes = () => {
+    if (!user) return
+    fetchEpisode(page, title, user!.token, sort)
       .then((result: { data: Episode[]; status: number }) => {
         if (result.status === 200) {
           setEpisodeStore(result.data)
+          if (result.data.length < 10) setHasMore(false)
+          else setHasMore(true)
           setSnackbarType('success')
           setSnackbarMessage('Successfully fetched episodes')
         } else if (result.status === 204) {
           setEpisodeStore([])
+          setHasMore(false)
           setSnackbarType('info')
           setSnackbarMessage('No episodes found')
         }
@@ -48,14 +50,8 @@ const useFetchEpisodes = ({
       .finally(() => {
         setSnackbarOpen(true)
       })
-  }, [
-    setEpisodeStore,
-    setSnackbarType,
-    setSnackbarMessage,
-    setSnackbarOpen,
-    page,
-    user,
-  ])
+  }
+  return getEpisodes
 }
 
 export default useFetchEpisodes
