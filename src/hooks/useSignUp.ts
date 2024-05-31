@@ -37,6 +37,7 @@ const useSignUp = ({
       token: '',
       role,
       enabled: false,
+      checked: false,
     }
 
     signup(newUser)

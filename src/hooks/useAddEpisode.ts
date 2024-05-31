@@ -46,6 +46,7 @@ const useAddEpisode = ({
       watched,
       checked: false,
       animeTitle,
+      anime: null,
     }
     addEpisodeStore(newEpisode)
 

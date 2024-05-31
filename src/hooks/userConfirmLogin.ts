@@ -35,6 +35,7 @@ const useConfirmLogin = ({
             enabled: true,
             password: '',
             token: result.data.token,
+            checked: false,
           }
           signIn(user)
           setSnackbarType('success')
