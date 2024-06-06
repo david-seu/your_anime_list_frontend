@@ -33,12 +33,15 @@ export const useAnimeStore = create<AnimeStore>()(
       sort: 'DESC',
       setSort: (sort: string) => set({ sort }),
       setTitle: (title: string) => set({ title }),
-      nextPage: () => set({ page: get().page + 1 }),
+      nextPage: () => {
+        console.log(get().page)
+        set({ page: get().page + 1 })
+      },
       prevPage: () => set({ page: get().page - 1 }),
       setAnimeList: (animeList: Anime[]) => set({ animeList }),
       setHasMore: (hasMore: boolean) => set({ hasMore }),
       addAnime: (anime: Anime) =>
-        set({ animeList: [...get().animeList, anime] }),
+        set({ animeList: [anime, ...get().animeList] }),
       deleteAnime: (id: number) =>
         set({ animeList: get().animeList.filter((anime) => anime.id !== id) }),
       updateAnime: (anime: Anime) =>

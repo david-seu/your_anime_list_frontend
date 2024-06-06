@@ -1,8 +1,12 @@
 import { Table } from 'react-bootstrap'
+import './init'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useEffect, useState } from 'react'
 import { AlertColor } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+import SockJS from 'sockjs-client'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Client } from '@stomp/stompjs'
 import Anime from '../data/Anime'
 import useAnimeStore from '../store/useAnimeStore'
 import useFetchAnime from '../hooks/useFetchAnime'
@@ -12,7 +16,7 @@ import useUserStore from '../store/useUserStore'
 import useFetchMoreAnime from '../hooks/useFetchMoreAnime'
 
 export default function AnimeTable() {
-  const animeList = useAnimeStore((state) => state.animeList)
+  const animeList = useAnimeStore((state) => state.getAllAnime)()
   const updateAnimeStore = useAnimeStore((state) => state.updateAnime)
   const hasMore = useAnimeStore((state) => state.hasMore)
   const user = useUserStore((state) => state.currentUser)
@@ -28,6 +32,28 @@ export default function AnimeTable() {
   const setAnimeListStore = useAnimeStore((state) => state.setAnimeList)
   const sort = useAnimeStore((state) => state.sort)
   const setSortStore = useAnimeStore((state) => state.setSort)
+  const addAnimeStore = useAnimeStore((state) => state.addAnime)
+
+  useEffect(() => {
+    const socket = new SockJS('https://localhost:443/ws')
+    const client = new Client({
+      webSocketFactory: () => socket,
+      onConnect: () => {
+        client.subscribe('/topic/anime', (message) => {
+          const anime = JSON.parse(message.body)
+          setAnimeListStore([anime, ...animeList])
+          window.location.reload()
+        })
+      },
+    })
+
+    client.activate()
+
+    return () => {
+      client.deactivate()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const fetchAnime = useFetchAnime({
     setSnackbarType,
