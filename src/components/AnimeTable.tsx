@@ -32,7 +32,6 @@ export default function AnimeTable() {
   const setAnimeListStore = useAnimeStore((state) => state.setAnimeList)
   const sort = useAnimeStore((state) => state.sort)
   const setSortStore = useAnimeStore((state) => state.setSort)
-  const addAnimeStore = useAnimeStore((state) => state.addAnime)
 
   useEffect(() => {
     const socket = new SockJS('https://localhost:443/ws')
