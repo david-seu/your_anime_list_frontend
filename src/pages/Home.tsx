@@ -11,6 +11,7 @@ import UserTable from '../components/UserTable'
 import HandlerButton from '../components/HandlerButton'
 import useAnimeStore from '../store/useAnimeStore'
 import useEpisodeStore from '../store/useEpisodeStore'
+import AnimeCreationSwitch from '../components/AnimeCreationSwitch'
 
 export default function Home(): JSX.Element {
   const user = useUserStore((state) => state.currentUser)!
@@ -66,6 +67,7 @@ export default function Home(): JSX.Element {
               <SwapVertOutlinedIcon />
               Sort
             </HandlerButton>
+            <AnimeCreationSwitch />
             <AnimeTable />
           </div>
           <div className="table">
