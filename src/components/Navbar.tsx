@@ -1,36 +1,40 @@
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
-import HandlerButton from './HandlerButton'
-import useSignOut from '../hooks/useSignOut'
-import AddMenu from './AddMenu'
-import DeleteMenu from './DeleteMenu'
+import HomeIcon from '@mui/icons-material/Home'
 import useUserStore from '../store/useUserStore'
-import useHandleDownload from '../hooks/useHandleDownload'
-import LinkButton from './LinkButton'
+import ExpandLinkButton from './ExpandLinkButton'
 import User from '../data/User'
-import FilterMenu from './FilterMenu'
+import LinkButton from './LinkButton'
+import useSignOut from '../hooks/useSignOut'
+import StyledButton from './StyledButton'
 
 export default function CustomNavBar() {
-  const handleSignOut = useSignOut()
   const user = useUserStore((state) => state.currentUser) as User
 
-  const handleDownload = useHandleDownload()
+  const signOut = useSignOut()
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" color="transparent">
+      <AppBar
+        color="transparent"
+        sx={{ backgroundColor: '#0B3954', boxShadow: 3 }}
+      >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <HandlerButton onClick={handleSignOut}>Sign Out</HandlerButton>
-          {(user?.role === 'ROLE_ADMIN' || user?.role === 'ROLE_MANAGER') && (
-            <AddMenu />
+          {!user && <ExpandLinkButton to="/signup">Sign Up</ExpandLinkButton>}
+          {!user && <LinkButton to="/">Sign In</LinkButton>}
+          {user && (
+            <ExpandLinkButton to="/anime/mine">
+              Your Anime List
+            </ExpandLinkButton>
           )}
-          {(user?.role === 'ROLE_ADMIN' || user?.role === 'ROLE_MANAGER') && (
-            <DeleteMenu />
+          {user && user.role === 'ROLE_ADMIN' && (
+            <ExpandLinkButton to="/user">Users</ExpandLinkButton>
           )}
-          <FilterMenu />
-          <LinkButton to="/stats">Stats</LinkButton>
-          <HandlerButton onClick={handleDownload}>Download Anime</HandlerButton>
+          <LinkButton to="/home">
+            <HomeIcon />
+          </LinkButton>
+          {user && <StyledButton onClick={signOut}>Sign Out</StyledButton>}
         </Toolbar>
       </AppBar>
     </Box>

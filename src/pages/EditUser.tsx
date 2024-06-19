@@ -2,7 +2,6 @@
 import { useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useNavigate, useParams } from 'react-router-dom'
-import LinkButton from '../components/LinkButton'
 import useUserStore from '../store/useUserStore'
 import EditUserForm from '../components/EditUserForm'
 
@@ -19,9 +18,8 @@ export default function EditUser(): JSX.Element {
   }, [user, navigate])
 
   return (
-    <div>
-      <LinkButton to="/home">Back</LinkButton>
-      <div className="edit--container">
+    <div className="container-fluid">
+      <div className="form-container">
         <EditUserForm id={id} />
       </div>
     </div>

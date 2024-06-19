@@ -1,12 +1,15 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
-import LinkButton from '../components/LinkButton'
 import SignUpForm from '../components/SignUpForm'
+import '../App.css'
 
-export default function SingUp() {
+export default function SignUp() {
   return (
-    <div>
-      <LinkButton to="/">Back</LinkButton>
-      <SignUpForm />
+    <div className="container-fluid">
+      <div className="form-container">
+        <h3>Register to YourAnimeList</h3>
+        <br />
+        <SignUpForm />
+      </div>
     </div>
   )
 }

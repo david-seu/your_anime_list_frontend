@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Form, Button } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 import { AlertColor } from '@mui/material'
 import CustomizedSnackbars from './CustomizedSnackBars'
 import useAddUser from '../hooks/useAddUser'
+import StyledButton from './StyledButton'
 
 export default function AddUserForm() {
   const [username, setUsername] = useState('')
@@ -25,10 +26,11 @@ export default function AddUserForm() {
 
   return (
     <div>
-      <Form noValidate className="gap-2">
+      <Form noValidate className="gap-2 form">
         <Form.Group className="mb-3" controlId="formUsername">
           <Form.Label>Username</Form.Label>
           <Form.Control
+            className="input"
             type="text"
             placeholder="Enter username"
             required
@@ -39,6 +41,7 @@ export default function AddUserForm() {
         <Form.Group className="mb-3" controlId="formEmail">
           <Form.Label>Email</Form.Label>
           <Form.Control
+            className="input"
             type="email"
             placeholder="Enter email"
             required
@@ -49,6 +52,7 @@ export default function AddUserForm() {
         <Form.Group className="mb-3" controlId="formPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
+            className="input"
             type="password"
             placeholder="Enter password"
             required
@@ -59,6 +63,7 @@ export default function AddUserForm() {
         <Form.Group className="mb-3" controlId="formUsername">
           <Form.Label>Role</Form.Label>
           <Form.Control
+            className="input"
             type="text"
             placeholder="Enter role: (manager, user)"
             required
@@ -66,9 +71,9 @@ export default function AddUserForm() {
           />
           <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
         </Form.Group>
-        <Button onClick={handleSubmit} type="submit">
+        <StyledButton onClick={handleSubmit} type="submit">
           Submit
-        </Button>
+        </StyledButton>
       </Form>
       <CustomizedSnackbars
         open={snackbarOpen}

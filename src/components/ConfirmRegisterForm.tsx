@@ -19,12 +19,13 @@ export default function ConfirmRegisterForm() {
 
   return (
     <div>
-      <Form className="gap-2">
+      <Form className="gap-2 form">
         <Form.Group className="mb-3" controlId="formEmail">
           <Form.Label>Token</Form.Label>
           <Form.Control
             type="text"
             placeholder="Enter confirmation token"
+            className="input"
             required
             onChange={(e) => setToken(e.target.value)}
           />

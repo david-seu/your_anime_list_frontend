@@ -1,9 +1,10 @@
-import { Button, Form } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 import { useState } from 'react'
 import { AlertColor } from '@mui/material'
 import CustomizedSnackbars from './CustomizedSnackBars'
 import useFetchUserById from '../hooks/useFetchUserById'
 import useEditUser from '../hooks/useEditUser'
+import StyledButton from './StyledButton'
 
 interface EditAnimeFormProps {
   id: string
@@ -39,11 +40,12 @@ export default function EditAnimeForm({ id }: EditAnimeFormProps) {
 
   return (
     <div>
-      <Form>
+      <Form className="form">
         <Form.Group className="mb-3" controlId="formUsername">
           <Form.Label>Username</Form.Label>
           <Form.Control
             type="text"
+            className="input"
             value={username}
             required
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -54,6 +56,7 @@ export default function EditAnimeForm({ id }: EditAnimeFormProps) {
         <Form.Group className="mb-3" controlId="formEmail">
           <Form.Label className="">Email</Form.Label>
           <Form.Control
+            className="input"
             type="email"
             value={email}
             required
@@ -65,6 +68,7 @@ export default function EditAnimeForm({ id }: EditAnimeFormProps) {
         <Form.Group className="mb-3" controlId="formPassword">
           <Form.Label className="">Password</Form.Label>
           <Form.Control
+            className="input"
             type="password"
             value={password}
             required
@@ -76,6 +80,7 @@ export default function EditAnimeForm({ id }: EditAnimeFormProps) {
         <Form.Group className="mb-3" controlId="formRole">
           <Form.Label className="">Role</Form.Label>
           <Form.Control
+            className="input"
             type="text"
             value={role}
             required
@@ -84,9 +89,9 @@ export default function EditAnimeForm({ id }: EditAnimeFormProps) {
             }
           />
         </Form.Group>
-        <Button onClick={(e) => handleSubmit(e)} type="submit">
+        <StyledButton onClick={(e) => handleSubmit(e)} type="submit">
           Submit
-        </Button>
+        </StyledButton>
       </Form>
       <CustomizedSnackbars
         open={snackbarOpen}

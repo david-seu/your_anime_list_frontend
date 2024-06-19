@@ -34,7 +34,7 @@ export default function AddAnimeForm() {
           />
           <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
         </Form.Group>
-          <Form.Group className="mb-3" controlId="formScore">
+        <Form.Group className="mb-3" controlId="formScore">
           <Form.Label>Score</Form.Label>
           <Form.Control
             type="number"

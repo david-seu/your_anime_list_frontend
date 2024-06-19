@@ -2,28 +2,17 @@ import { SetStateAction, Dispatch } from 'react'
 import Anime from '../data/Anime'
 import { useAnimeStore } from '../store/useAnimeStore'
 import { updateAnime } from '../services/AnimeService'
-import User from '../data/User'
 import useUserStore from '../store/useUserStore'
 
 interface UseEditAnimeProps {
-  user: User
-  id: string
-  title: string
-  score: number
-  watched: boolean
-  numEpisodes: number
+  anime: Anime
   setSnackbarOpen: Dispatch<SetStateAction<boolean>>
   setSnackbarType: Dispatch<SetStateAction<string>>
   setSnackbarMessage: Dispatch<SetStateAction<string>>
 }
 
 const useEditAnime = ({
-  user,
-  id,
-  title,
-  score,
-  watched,
-  numEpisodes,
+  anime,
   setSnackbarOpen,
   setSnackbarType,
   setSnackbarMessage,
@@ -31,22 +20,12 @@ const useEditAnime = ({
   const updateAnimeStore = useAnimeStore((state) => state.updateAnime)
   const currentUser = useUserStore((state) => state.currentUser)!
 
-  const handleSubmit = (e: React.FormEvent<HTMLButtonElement>): void => {
-    e.preventDefault()
+  const handleSubmit = (): void => {
     if (!currentUser) return
 
-    const newAnime: Anime = {
-      id: Number(id),
-      title,
-      watched,
-      score: Number(score),
-      checked: false,
-      numEpisodes,
-      user,
-    }
-    updateAnimeStore(newAnime)
+    updateAnimeStore(anime)
 
-    updateAnime(newAnime, currentUser!.token)
+    updateAnime(anime, currentUser!.token)
       .then((result) => {
         if (result.status === 200) {
           setSnackbarType('success')

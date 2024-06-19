@@ -31,6 +31,7 @@ export const signin = async (username: string, password: string) => {
     username,
     password,
   }
+  console.log(data)
   const result = await apiAuth.post('/signIn', data)
   return result
 }

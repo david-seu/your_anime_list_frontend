@@ -1,11 +1,11 @@
 import ConfirmRegisterForm from '../components/ConfirmRegisterForm'
-import LinkButton from '../components/LinkButton'
 
 export default function ConfirmRegister() {
   return (
-    <div>
-      <LinkButton to="/">Back</LinkButton>
-      <ConfirmRegisterForm />
+    <div className="container-fluid">
+      <div className="form-container">
+        <ConfirmRegisterForm />
+      </div>
     </div>
   )
 }

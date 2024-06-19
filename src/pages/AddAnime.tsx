@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useNavigate } from 'react-router-dom'
-import LinkButton from '../components/LinkButton'
+import ExpandLinkButton from '../components/ExpandLinkButton'
 import AddAnimeForm from '../components/AddAnimeForm'
 import useUserStore from '../store/useUserStore'
 
@@ -17,7 +17,7 @@ export default function AddAnime() {
 
   return (
     <div>
-      <LinkButton to="/home">Back</LinkButton>
+      <ExpandLinkButton to="/home">Back</ExpandLinkButton>
       <div className="add--container">
         <AddAnimeForm />
       </div>

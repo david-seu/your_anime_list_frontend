@@ -2,8 +2,6 @@ import Anime from '../data/Anime'
 import { fetchAnime } from '../services/AnimeService'
 // eslint-disable-next-line import/no-named-as-default
 import useAnimeStore from '../store/useAnimeStore'
-// eslint-disable-next-line import/no-named-as-default
-import useUserStore from '../store/useUserStore'
 
 interface UseFetchAnimeProps {
   setSnackbarType: (type: string) => void
@@ -16,16 +14,34 @@ const useFetchAnime = ({
   setSnackbarMessage,
   setSnackbarOpen,
 }: UseFetchAnimeProps) => {
-  const user = useUserStore((state) => state.currentUser)!
   const page = useAnimeStore((state) => state.page)
   const setAnimeStore = useAnimeStore((state) => state.setAnimeList)
   const setHasMoreStore = useAnimeStore((state) => state.setHasMore)
   const title = useAnimeStore((state) => state.title)
-  const sort = useAnimeStore((state) => state.sort)
+  const sortDirection = useAnimeStore((state) => state.sortDirection)
+  const season = useAnimeStore((state) => state.season)
+  const year = useAnimeStore((state) => state.year)
+  const genres = useAnimeStore((state) => state.genres)
+  const tags = useAnimeStore((state) => state.tags)
+  const studios = useAnimeStore((state) => state.studios)
+  const type = useAnimeStore((state) => state.type)
+  const status = useAnimeStore((state) => state.status)
+  const orderBy = useAnimeStore((state) => state.orderBy)
 
   const getAnime = () => {
-    if (!user) return
-    fetchAnime(page, title, user!.token, sort)
+    fetchAnime(
+      page,
+      sortDirection,
+      title,
+      season,
+      year,
+      genres,
+      tags,
+      studios,
+      type,
+      status,
+      orderBy
+    )
       .then((result: { data: Anime[]; status: number }) => {
         if (result.status === 200) {
           setAnimeStore(result.data)

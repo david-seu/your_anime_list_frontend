@@ -13,7 +13,7 @@ import useFetchAnime from '../hooks/useFetchAnime'
 import CustomizedSnackbars from './CustomizedSnackBars'
 import Loader from './Loader'
 import useUserStore from '../store/useUserStore'
-import useFetchMoreAnime from '../hooks/useFetchMoreAnime'
+import useFetchMoreAnime from '../hooks/useFetchMoreAnimeUser'
 
 export default function AnimeTable() {
   const animeList = useAnimeStore((state) => state.animeList)
@@ -30,8 +30,8 @@ export default function AnimeTable() {
   const setPageStoreAnime = useAnimeStore((state) => state.setPage)
   const setHasMoreStore = useAnimeStore((state) => state.setHasMore)
   const setAnimeListStore = useAnimeStore((state) => state.setAnimeList)
-  const sort = useAnimeStore((state) => state.sort)
-  const setSortStore = useAnimeStore((state) => state.setSort)
+  const sort = useAnimeStore((state) => state.sortDirection)
+  const setSortStore = useAnimeStore((state) => state.setSortDirection)
   const animeListRef = useRef(animeList)
 
   useEffect(() => {

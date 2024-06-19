@@ -33,5 +33,6 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 0,
     'import/no-named-as-default': 0,
+    '@typescript-eslint/no-explicit-any': 'off',
   },
 }

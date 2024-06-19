@@ -1,7 +1,7 @@
 /* eslint-disable import/no-named-as-default */
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import LinkButton from '../components/LinkButton'
+import ExpandLinkButton from '../components/ExpandLinkButton'
 import useFetchEpisodeById from '../hooks/useFetchEpisodeById'
 import useUserStore from '../store/useUserStore'
 
@@ -35,8 +35,8 @@ export default function ViewEpisode(): JSX.Element {
 
   return (
     <div>
-      <LinkButton to="/home">Back</LinkButton>
-      <LinkButton to={`/editEpisode/${id}`}>Edit</LinkButton>
+      <ExpandLinkButton to="/home">Back</ExpandLinkButton>
+      <ExpandLinkButton to={`/editEpisode/${id}`}>Edit</ExpandLinkButton>
       <div className="view--container">
         <h1>{title}</h1>
         <p>Number: {number}</p>

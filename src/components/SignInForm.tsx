@@ -1,8 +1,10 @@
-import { Form, Button } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 import { useState } from 'react'
 import { AlertColor } from '@mui/material'
 import CustomizedSnackbars from './CustomizedSnackBars'
 import useSignIn from '../hooks/useSignIn'
+import '../App.css'
+import StyledButton from './StyledButton'
 
 export default function SignInForm() {
   const [username, setUsername] = useState('')
@@ -21,10 +23,10 @@ export default function SignInForm() {
 
   return (
     <div>
-      <Form className="gap-2">
-        <Form.Group className="mb-3" controlId="formEmail">
-          <Form.Label>Username</Form.Label>
+      <Form className="gap-2 form">
+        <Form.Group className="mb-3" controlId="formUsername">
           <Form.Control
+            className="input"
             type="text"
             placeholder="Enter username"
             required
@@ -32,17 +34,24 @@ export default function SignInForm() {
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formPassword">
-          <Form.Label>Password</Form.Label>
           <Form.Control
+            className="input"
             type="password"
             placeholder="Enter password"
             required
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
-        <Button onClick={(e) => handleSubmit(e)} type="submit">
-          Login
-        </Button>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <StyledButton
+            onClick={handleSubmit}
+            style={{
+              width: '50%',
+            }}
+          >
+            Login
+          </StyledButton>
+        </div>
       </Form>
       <CustomizedSnackbars
         open={snackbarOpen}

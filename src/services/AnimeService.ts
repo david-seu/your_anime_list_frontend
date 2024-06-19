@@ -4,25 +4,35 @@ import Anime from '../data/Anime'
 // eslint-disable-next-line import/no-extraneous-dependencies
 
 const REST_API_BASE_URL = `${import.meta.env.VITE_REST_API_BASE_URL}/anime`
-//   'https://mpp-david-spring-app-20240515142023.azuremicroservices.io/api/anime'
 
 rax.attach()
 
 export const fetchAnime = async (
-  page: number,
-  title: string,
-  token: string,
-  sort: string
+  page = 0,
+  sortDirection = 'desc',
+  title = '',
+  season: string | null = null,
+  year: number | null = null,
+  genres: string[] = [],
+  tags: string[] = [],
+  studios: string[] = [],
+  type: string[] = [],
+  status: string | null = null,
+  orderBy: string | null = 'score'
 ) => {
-  console.log(`${REST_API_BASE_URL}/getAll?title=${title}`)
   const result = await axios(`${REST_API_BASE_URL}/getAll`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
     params: {
       page,
+      sortDirection,
       title,
-      sort,
+      season,
+      year,
+      genres,
+      tags,
+      studios,
+      type,
+      status,
+      orderBy,
     },
     raxConfig: {
       retry: 100,
@@ -41,7 +51,6 @@ export const fetchAnime = async (
 export const addAnime = async (anime: Anime, token: string) => {
   const data = {
     title: anime.title,
-    watched: anime.watched,
     score: anime.score,
   }
   const result = await axios(`${REST_API_BASE_URL}/add`, {
@@ -65,11 +74,8 @@ export const addAnime = async (anime: Anime, token: string) => {
   return result
 }
 
-export const getAnime = async (animeId: number, token: string) => {
+export const getAnime = async (animeId: number) => {
   const result = await axios(`${REST_API_BASE_URL}/get/${animeId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
     raxConfig: {
       retry: 100,
       noResponseRetries: 100,
@@ -87,7 +93,6 @@ export const getAnime = async (animeId: number, token: string) => {
 export const updateAnime = async (anime: Anime, token: string) => {
   const data = {
     title: anime.title,
-    watched: anime.watched,
     score: anime.score,
     user: anime.user,
   }

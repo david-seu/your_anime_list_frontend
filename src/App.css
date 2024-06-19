@@ -1,14 +1,27 @@
 /* Global Style Starts */
 
+
+
 :root {
-  --primary: #51d8d8;
-  --heading-color: #052b44;
-  --bg-shade: #f5fcff;
-  --darkblue: #1c1cee53;
-  --black: #00rgba(9, 29, 71, 0.325)
+  background-color: black;
+  --primary: #0B3954;
+  --secondary: #1a1a1a;
   --white: #ffffff;
+  --black: #000000;
+  --grey: #808080;
+  --accent: #39A0ED;
 }
 
+h3{
+  color: var(--secondary) !important;
+  font-size: 40 !important;
+}
+
+.title{
+  color: var(--primary) !important;
+  font-size: 60 !important;
+  font: bold !important;
+}
 
 .btn {
   font-family: "Roboto";
@@ -64,21 +77,64 @@
   display: list-item;
   width: 100%;
 }
+.input{
+  background-color: var(--secondary) !important;
+  border-color: var(--secondary) !important;
+  color: var(--primary) !important;
+}
+.input:focus {
+  box-shadow: none !important;
+}
+
+.form{
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+}
+
+.form-container{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 50px;
+  background-color: var(--primary);
+  line-height: 3;
+  box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.container-fluid{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;  
+}
+
+.list{
+  background-color: var(--primary);
+  border-radius: 10px;
+  box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.5);
+}
 /* Global Style Ends */
 
 
 /* Home Style Starts */
 
-.home--container{
-    display: list-item;
+.home-container{
+    display: flex;
+    position: relative;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    list-style: none;
-    line-height: 60px;
-    margin-top: 50px;
-    margin-left: 200px;
     width: 100%;
-    padding: 0;
+    height: 100%;
+    margin-top: 5%;
 }
 
 .tables--container{
@@ -135,3 +191,39 @@ button-container{
   line-height: 50px;
 }
 /* Add Style Ends */
+
+
+/* Anime Preview Grid Style Starts */
+
+.anime-preview-container{
+  
+}
+
+.hoverable-card{
+  width: 100% !important;
+  background-color: var(--primary) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.5) !important;
+}
+
+.popover-card{
+  background-color: var(--primary) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Anime Preview Grid Style Ends */
+
+/* Filter Bar Style Starts */
+
+.search-bar{
+  margin-right: 10px;
+  background-color: var(--primary);
+  box-shadow: 0 0 8px 4px rgba(255, 255, 255, 0.05);
+}
+
+.menu-item{
+  background-color: var(--primary);
+  color: var(--white);
+  border-color: var(--primary);
+}

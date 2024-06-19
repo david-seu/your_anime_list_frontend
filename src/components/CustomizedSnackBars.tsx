@@ -17,7 +17,12 @@ export default function CustomizedSnackbars({
 }: CustomizedSnackbarsProps): JSX.Element {
   return (
     <div>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        style={{ backgroundColor: 'transparent' }}
+      >
         <Alert
           onClose={handleClose}
           severity={type}

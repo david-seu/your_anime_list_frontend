@@ -1,8 +1,10 @@
-import { Form, Button } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 import { AlertColor } from '@mui/material'
 import { useState } from 'react'
 import CustomizedSnackbars from './CustomizedSnackBars'
 import useSignUp from '../hooks/useSignUp'
+import StyledButton from './StyledButton'
+import '../App.css'
 
 export default function SignUpForm() {
   const [username, setUsername] = useState('')
@@ -24,47 +26,45 @@ export default function SignUpForm() {
   })
 
   return (
-    <Form className="gap-2">
+    <Form className="gap-2 form">
       <Form.Group className="mb-3" controlId="formName">
-        <Form.Label>Username</Form.Label>
         <Form.Control
+          className="input"
           type="text"
-          placeholder="Enter username"
+          placeholder="Username"
           required
           onChange={(e) => setUsername(e.target.value)}
         />
       </Form.Group>
-      <Form.Group className="mb-3" controlId="formRole">
-        <Form.Label>Role</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Enter role"
-          required
-          onChange={(e) => setRole(e.target.value)}
-        />
-      </Form.Group>
       <Form.Group className="mb-3" controlId="formEmail">
-        <Form.Label>Email</Form.Label>
         <Form.Control
+          className="input"
           type="email"
-          placeholder="Enter email"
+          placeholder="Email"
           required
           onChange={(e) => setEmail(e.target.value)}
         />
       </Form.Group>
       <Form.Group className="mb-3" controlId="formPassword">
-        <Form.Label>Password</Form.Label>
         <Form.Control
+          className="input"
           type="password"
-          placeholder="Enter password"
+          placeholder="Password"
           required
           onChange={(e) => setPassword(e.target.value)}
         />
       </Form.Group>
 
-      <Button onClick={(e) => handleSubmit(e)} type="submit">
-        Submit
-      </Button>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <StyledButton
+          onClick={handleSubmit}
+          style={{
+            width: '50%',
+          }}
+        >
+          Sign Up
+        </StyledButton>
+      </div>
       <CustomizedSnackbars
         open={snackbarOpen}
         type={snackbarType as AlertColor}
