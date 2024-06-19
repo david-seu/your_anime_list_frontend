@@ -51,7 +51,29 @@ export const fetchAnime = async (
 export const addAnime = async (anime: Anime, token: string) => {
   const data = {
     title: anime.title,
+    synopsis: anime.synopsis,
     score: anime.score,
+    popularity: anime.popularity,
+    nrEpisodes: anime.nrEpisodes,
+    pictureURL: anime.pictureURL,
+    thumbnailURL: anime.thumbnailURL,
+    startDate: anime.startDate,
+    endDate: anime.endDate,
+    watching: anime.watching,
+    completed: anime.completed,
+    onHold: anime.onHold,
+    dropped: anime.dropped,
+    planToWatch: anime.planToWatch,
+    tags: anime.tags,
+    genres: anime.genres,
+    studios: anime.studios,
+    synonyms: anime.synonyms,
+    relatedAnime: anime.relatedAnime,
+    recommendations: anime.recommendations,
+    user: anime.user,
+    type: anime.type,
+    status: anime.status,
+    animeSeason: anime.animeSeason,
   }
   const result = await axios(`${REST_API_BASE_URL}/add`, {
     method: 'POST',
@@ -93,9 +115,20 @@ export const getAnime = async (animeId: number) => {
 export const updateAnime = async (anime: Anime, token: string) => {
   const data = {
     title: anime.title,
-    score: anime.score,
-    user: anime.user,
+    synopsis: anime.synopsis,
+    nrEpisodes: anime.nrEpisodes,
+    pictureURL: anime.pictureURL,
+    thumbnailURL: anime.thumbnailURL,
+    startDate: anime.startDate,
+    endDate: anime.endDate,
+    type: anime.type,
+    status: anime.status,
+    tags: anime.tags,
+    genres: anime.genres,
+    studios: anime.studios,
+    animeSeason: anime.animeSeason,
   }
+  console.log('Data:', data)
   const result = await axios(`${REST_API_BASE_URL}/update/${anime.id}`, {
     method: 'PATCH',
     headers: {

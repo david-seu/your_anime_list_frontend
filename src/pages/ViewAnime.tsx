@@ -155,7 +155,7 @@ export default function ViewAnime(): JSX.Element {
               </Grid>
               {(user.role === 'ROLE_ADMIN' || user.role === 'ROLE_MANAGER') && (
                 <Grid item>
-                  <ExpandLinkButton to={`/editAnime/${id}`}>
+                  <ExpandLinkButton to={`/anime/edit/${id}`}>
                     Edit
                   </ExpandLinkButton>
                 </Grid>

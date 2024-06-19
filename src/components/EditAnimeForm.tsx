@@ -9,6 +9,7 @@ import {
   InputLabel,
   Chip,
   AlertColor,
+  Grid,
 } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import Anime from '../data/Anime'
@@ -22,6 +23,7 @@ import Studio from '../data/Studio'
 import CustomizedSnackbars from './CustomizedSnackBars'
 import useStudioStore from '../store/useStudioStore'
 import useEditAnime from '../hooks/useEditAnime'
+import StyledButton from './StyledButton'
 
 interface AnimeEditFormProps {
   initialAnimeId: number
@@ -67,13 +69,14 @@ export default function EditAnimeForm({ initialAnimeId }: AnimeEditFormProps) {
     fetchGenre()
     fetchTags()
     fetchStudios()
+    console.log(anime)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const tags = useTagStore((state) => state.tags)
 
   const years = Array.from({ length: 80 }, (_, i) => 2024 - i)
-  const seasons = ['Winter', 'Spring', 'Summer', 'Fall'].flatMap((season) =>
+  const seasons = ['WINTER', 'SPRING', 'SUMMER', 'FALL'].flatMap((season) =>
     years.map((year) => ({ season, year }))
   )
 
@@ -81,7 +84,7 @@ export default function EditAnimeForm({ initialAnimeId }: AnimeEditFormProps) {
     const { name, value } = event.target
     if (anime) {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      ; ({ ...anime, [name!]: value })
+      setAnime({ ...anime, [name!]: value })
     }
   }
 
@@ -137,90 +140,114 @@ export default function EditAnimeForm({ initialAnimeId }: AnimeEditFormProps) {
 
   return (
     <div>
-      <Box
-        component="form"
-        sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-      >
-        <TextField
-          name="title"
-          label="Title"
-          value={anime?.title || ''}
-          onChange={handleChange}
-          fullWidth
-        />
-        <TextField
-          name="synopsis"
-          label="Synopsis"
-          value={anime?.synopsis || ''}
-          onChange={handleChange}
-          fullWidth
-          multiline
-          rows={4}
-        />
-        <TextField
-          name="nrEpisodes"
-          label="Number of Episodes"
-          type="number"
-          value={anime?.nrEpisodes || ''}
-          onChange={handleChange}
-          fullWidth
-        />
-        <TextField
-          name="pictureURL"
-          label="Picture URL"
-          value={anime?.pictureURL || ''}
-          onChange={handleChange}
-          fullWidth
-        />
-        <TextField
-          name="thumbnailURL"
-          label="Thumbnail URL"
-          value={anime?.thumbnailURL || ''}
-          onChange={handleChange}
-          fullWidth
-        />
-        <TextField
-          name="startDate"
-          label="Start Date"
-          type="date"
-          value={anime?.startDate || ''}
-          onChange={handleChange}
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-        />
-        <TextField
-          name="endDate"
-          label="End Date"
-          type="date"
-          value={anime?.endDate || ''}
-          onChange={handleChange}
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-        />
-        <FormControl fullWidth>
-          <InputLabel>Type</InputLabel>
-          <Select name="type" value={anime?.type || ''} onChange={handleChange}>
-            {['TV', 'Movie', 'OVA', 'ONA', 'Special'].map((type) => (
-              <MenuItem key={type} value={type}>
-                {type}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl fullWidth>
-          <InputLabel>Status</InputLabel>
-          <Select
-            name="status"
-            value={anime?.status || ''}
-            onChange={handleChange}
-          >
-            {['FINISHED', 'ONGOING', 'UPCOMING', 'UNKNOWN'].map((status) => (
-              <MenuItem key={status} value={status}>
-                {status}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+      <Box sx={{ backgroundColor: '#0B3954' }}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              name="title"
+              label="Title"
+              value={anime?.title || ''}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              name="synopsis"
+              label="Synopsis"
+              value={anime?.synopsis || ''}
+              onChange={handleChange}
+              fullWidth
+              multiline
+              rows={4}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              name="nrEpisodes"
+              label="Number of Episodes"
+              type="number"
+              value={anime?.nrEpisodes || ''}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              name="pictureURL"
+              label="Picture URL"
+              value={anime?.pictureURL || ''}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              name="thumbnailURL"
+              label="Thumbnail URL"
+              value={anime?.thumbnailURL || ''}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              name="startDate"
+              label="Start Date"
+              type="date"
+              value={anime?.startDate || ''}
+              onChange={handleChange}
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              name="endDate"
+              label="End Date"
+              type="date"
+              value={anime?.endDate || ''}
+              onChange={handleChange}
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <FormControl fullWidth>
+              <InputLabel>Type</InputLabel>
+              <Select
+                name="type"
+                value={anime?.type || ''}
+                onChange={handleChange}
+              >
+                {['TV', 'Movie', 'OVA', 'ONA', 'Special'].map((type) => (
+                  <MenuItem key={type} value={type}>
+                    {type}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <FormControl fullWidth>
+              <InputLabel>Status</InputLabel>
+              <Select
+                name="status"
+                value={anime?.status || ''}
+                onChange={handleChange}
+              >
+                {['FINISHED', 'ONGOING', 'UPCOMING', 'UNKNOWN'].map(
+                  (status) => (
+                    <MenuItem key={status} value={status}>
+                      {status}
+                    </MenuItem>
+                  )
+                )}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+        <br />
         <FormControl fullWidth>
           <InputLabel>Genres</InputLabel>
           <Select
@@ -242,6 +269,7 @@ export default function EditAnimeForm({ initialAnimeId }: AnimeEditFormProps) {
             ))}
           </Select>
         </FormControl>
+        <br />
         <FormControl fullWidth>
           <InputLabel>Studios</InputLabel>
           <Select
@@ -263,6 +291,7 @@ export default function EditAnimeForm({ initialAnimeId }: AnimeEditFormProps) {
             ))}
           </Select>
         </FormControl>
+        <br />
         <FormControl fullWidth>
           <InputLabel>Tags</InputLabel>
           <Select
@@ -288,7 +317,7 @@ export default function EditAnimeForm({ initialAnimeId }: AnimeEditFormProps) {
           <InputLabel>Season</InputLabel>
           <Select
             name="animeSeason"
-            value={`${anime?.animeSeason.season || ''} ${anime?.animeSeason.year || ''}`}
+            value={`${anime?.animeSeason?.season || ''} lol ${anime?.animeSeason?.year || ''}`}
             onChange={handleSeasonChange}
           >
             {seasons.map((season) => (
@@ -302,12 +331,8 @@ export default function EditAnimeForm({ initialAnimeId }: AnimeEditFormProps) {
           </Select>
         </FormControl>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-          <Button onClick={handleCancel} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit} color="primary">
-            Save
-          </Button>
+          <StyledButton onClick={handleCancel}>Cancel</StyledButton>
+          <StyledButton onClick={handleSubmit}>Save</StyledButton>
         </Box>
       </Box>
       <CustomizedSnackbars

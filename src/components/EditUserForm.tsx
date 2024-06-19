@@ -1,6 +1,6 @@
 import { Form } from 'react-bootstrap'
 import { useState } from 'react'
-import { AlertColor } from '@mui/material'
+import { AlertColor, InputLabel, MenuItem, Select } from '@mui/material'
 import CustomizedSnackbars from './CustomizedSnackBars'
 import useFetchUserById from '../hooks/useFetchUserById'
 import useEditUser from '../hooks/useEditUser'
@@ -78,16 +78,18 @@ export default function EditAnimeForm({ id }: EditAnimeFormProps) {
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formRole">
-          <Form.Label className="">Role</Form.Label>
-          <Form.Control
-            className="input"
-            type="text"
-            value={role}
-            required
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setRole(e.target.value)
-            }
-          />
+          <InputLabel id="role-label">Role</InputLabel>
+          <Select
+            labelId="role-label"
+            id="role-select"
+            value={role || ''}
+            onChange={(e: any) => setRole(e.target.value as string)}
+            name="role"
+          >
+            <MenuItem value="ROLE_ADMIN">Admin</MenuItem>
+            <MenuItem value="ROLE_USER">User</MenuItem>
+            <MenuItem value="ROLE_MANAGER">Manager</MenuItem>
+          </Select>
         </Form.Group>
         <StyledButton onClick={(e) => handleSubmit(e)} type="submit">
           Submit

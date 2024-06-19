@@ -19,10 +19,8 @@ export default function EditAnime(): JSX.Element {
   }, [user, navigate])
 
   return (
-    <div className="container-fluid">
-      <div className="form-container">
-        <EditAnimeForm initialAnimeId={Number(id)} />
-      </div>
+    <div className="home-container">
+      <EditAnimeForm initialAnimeId={Number(id)} />
     </div>
   )
 }

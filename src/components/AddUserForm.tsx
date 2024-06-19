@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Form } from 'react-bootstrap'
-import { AlertColor } from '@mui/material'
+import { AlertColor, InputLabel, MenuItem, Select } from '@mui/material'
 import CustomizedSnackbars from './CustomizedSnackBars'
 import useAddUser from '../hooks/useAddUser'
 import StyledButton from './StyledButton'
@@ -61,14 +61,18 @@ export default function AddUserForm() {
           <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="mb-3" controlId="formUsername">
-          <Form.Label>Role</Form.Label>
-          <Form.Control
-            className="input"
-            type="text"
-            placeholder="Enter role: (manager, user)"
-            required
-            onChange={(e) => setRole(e.target.value)}
-          />
+          <InputLabel id="role-label">Role</InputLabel>
+          <Select
+            labelId="role-label"
+            id="role-select"
+            value={role || ''}
+            onChange={(e: any) => setRole(e.target.value as string)}
+            name="role"
+          >
+            <MenuItem value="ROLE_ADMIN">Admin</MenuItem>
+            <MenuItem value="ROLE_USER">User</MenuItem>
+            <MenuItem value="ROLE_MANAGER">Manager</MenuItem>
+          </Select>
           <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
         </Form.Group>
         <StyledButton onClick={handleSubmit} type="submit">

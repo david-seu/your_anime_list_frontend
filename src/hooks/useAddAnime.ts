@@ -5,18 +5,14 @@ import { addAnime } from '../services/AnimeService'
 import useUserStore from '../store/useUserStore'
 
 interface UseAddAnimeProps {
-  title: string
-  score: number
-  watched: boolean
+  anime: Anime
   setSnackbarOpen: Dispatch<SetStateAction<boolean>>
   setSnackbarType: Dispatch<SetStateAction<string>>
   setSnackbarMessage: Dispatch<SetStateAction<string>>
 }
 
 const useAddAnime = ({
-  title,
-  score,
-  watched,
+  anime,
   setSnackbarOpen,
   setSnackbarType,
   setSnackbarMessage,
@@ -29,24 +25,13 @@ const useAddAnime = ({
 
     if (!user) return
 
-    const id = -1
-
-    const newAnime: Anime = {
-      id,
-      title,
-      watched,
-      score,
-      checked: false,
-      numEpisodes: 0,
-      user,
-    }
-    addAnime(newAnime, user!.token)
+    addAnime(anime, user!.token)
       .then((result) => {
         if (result.status !== 201) {
           setSnackbarType('error')
           setSnackbarMessage('Failed to add anime')
         } else {
-          addAnimeStore(newAnime)
+          addAnimeStore(anime)
           setSnackbarType('success')
           setSnackbarMessage('Successfully added anime')
         }
@@ -56,7 +41,7 @@ const useAddAnime = ({
           setSnackbarType('error')
           setSnackbarMessage(error.response.data)
         } else {
-          addAnimeStore(newAnime)
+          addAnimeStore(anime)
           setSnackbarType('warning')
           setSnackbarMessage('Server is down, but anime added locally')
         }
