@@ -20,9 +20,7 @@ const useAddAnime = ({
   const addAnimeStore = useAnimeStore((state) => state.addAnime)
   const user = useUserStore((state) => state.currentUser)!
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault()
-
+  const handleSubmit = () => {
     if (!user) return
 
     addAnime(anime, user!.token)

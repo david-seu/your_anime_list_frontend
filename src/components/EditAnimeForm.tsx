@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
   Box,
-  Button,
   TextField,
   Select,
   MenuItem,
@@ -24,9 +23,10 @@ import CustomizedSnackbars from './CustomizedSnackBars'
 import useStudioStore from '../store/useStudioStore'
 import useEditAnime from '../hooks/useEditAnime'
 import StyledButton from './StyledButton'
+import useAddAnime from '../hooks/useAddAnime'
 
 interface AnimeEditFormProps {
-  initialAnimeId: number
+  initialAnimeId: string
 }
 
 export default function EditAnimeForm({ initialAnimeId }: AnimeEditFormProps) {
@@ -57,7 +57,7 @@ export default function EditAnimeForm({ initialAnimeId }: AnimeEditFormProps) {
     setSnackbarOpen,
   })
 
-  const id = initialAnimeId.toString()
+  const id = initialAnimeId
 
   const fetchAnimeById = useFetchAnimeById({
     id,
@@ -124,17 +124,27 @@ export default function EditAnimeForm({ initialAnimeId }: AnimeEditFormProps) {
     setSnackbarMessage,
   })
 
+  const addAnime = useAddAnime({
+    anime: anime!,
+    setSnackbarOpen,
+    setSnackbarType,
+    setSnackbarMessage,
+  })
+
   const handleSubmit = () => {
-    if (anime) {
-      // Dummy save function, replace with actual onSave
+    if (initialAnimeId !== 'new') {
       console.log('Saved Anime:', anime)
       updateAnime()
+    }
+    if (initialAnimeId === 'new') {
+      console.log('Add Anime:', anime)
+      addAnime()
     }
   }
 
   const handleCancel = () => {
-    // Dummy cancel function, replace with actual onCancel
     console.log('Cancel Edit')
+    if (initialAnimeId === 'new') navigate('/anime')
     navigate(`/anime/${initialAnimeId}`)
   }
 

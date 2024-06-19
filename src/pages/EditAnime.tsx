@@ -7,7 +7,6 @@ import useUserStore from '../store/useUserStore'
 
 export default function EditAnime(): JSX.Element {
   const id = useParams<{ id: string }>().id as string
-  console.log(id)
 
   const user = useUserStore((state) => state.currentUser)!
   const navigate = useNavigate()
@@ -20,7 +19,7 @@ export default function EditAnime(): JSX.Element {
 
   return (
     <div className="home-container">
-      <EditAnimeForm initialAnimeId={Number(id)} />
+      <EditAnimeForm initialAnimeId={id} />
     </div>
   )
 }
