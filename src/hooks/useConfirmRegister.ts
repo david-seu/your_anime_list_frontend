@@ -26,7 +26,7 @@ const useConfirmRegister = ({
           setSnackbarType('success')
           setSnackbarMessage('User registered successfully')
           setSnackbarOpen(true)
-          navigate('/')
+          navigate('/login')
         } else if (result.status === 404) {
           setSnackbarType('error')
           setSnackbarMessage(result.data)

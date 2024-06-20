@@ -41,7 +41,7 @@ const useConfirmLogin = ({
           setSnackbarType('success')
           setSnackbarMessage('User logged successfully')
           setSnackbarOpen(true)
-          navigate('/home')
+          navigate('/')
         } else if (result.status === 404) {
           setSnackbarType('error')
           setSnackbarMessage(result.data)

@@ -1,12 +1,11 @@
 import styled from '@emotion/styled'
 import { Button } from 'react-bootstrap'
-import { Add as AddIcon } from '@mui/icons-material'
 
 const StyledButton = styled(Button)({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  boxShadow: 'none',
+  boxShadow: '0px 0px 10px 0px #1a1a1a',
   textTransform: 'none',
   fontSize: 16,
   lineHeight: 1.5,

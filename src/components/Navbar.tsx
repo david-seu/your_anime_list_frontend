@@ -4,7 +4,6 @@ import Toolbar from '@mui/material/Toolbar'
 import HomeIcon from '@mui/icons-material/Home'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import IconButton from '@mui/material/IconButton'
 import AddIcon from '@mui/icons-material/Add'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -30,6 +29,10 @@ export default function CustomNavBar() {
 
   const signOut = useSignOut()
 
+  const handleSignOut = () => {
+    signOut()
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -44,7 +47,7 @@ export default function CustomNavBar() {
               Your Anime List
             </ExpandLinkButton>
           )}
-          {user && user.role !== 'ROLE_USEr' && (
+          {user && user.role !== 'ROLE_USER' && (
             <>
               <StyledButton onClick={handleClick}>
                 <AddIcon />
@@ -53,8 +56,31 @@ export default function CustomNavBar() {
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
+                sx={{
+                  '& .MuiPaper-root': {
+                    backgroundColor: '#0B3954', // Background color of the menu
+                    color: '#39A0ED', // Text color of the menu
+                  },
+                }}
               >
-                <MenuItem onClick={handleClose}>
+                <MenuItem
+                  onClick={handleClose}
+                  sx={{
+                    backgroundColor: '#0B3954', // Background color of the item
+                    color: '#39A0ED', // Text color of the item
+                    '&:hover': {
+                      backgroundColor: '#39A0ED', // Background color on hover
+                      color: '#0B3954', // Text color on hover
+                    },
+                    '& a': {
+                      color: 'inherit', // Ensure the link inherits the text color
+                      textDecoration: 'none', // Remove underline from link
+                      display: 'block', // Ensure link covers the whole MenuItem
+                      width: '100%',
+                      height: '100%',
+                    },
+                  }}
+                >
                   <Link to="/anime/new">Add Anime</Link>
                 </MenuItem>
               </Menu>
@@ -67,7 +93,9 @@ export default function CustomNavBar() {
             <HomeIcon />
           </LinkButton>
           <LinkButton to="/anime">Browse</LinkButton>
-          {user && <StyledButton onClick={signOut}>Sign Out</StyledButton>}
+          {user && (
+            <StyledButton onClick={handleSignOut}>Sign Out</StyledButton>
+          )}
         </Toolbar>
       </AppBar>
     </Box>

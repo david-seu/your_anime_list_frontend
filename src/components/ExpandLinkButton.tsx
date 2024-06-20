@@ -8,7 +8,7 @@ interface LinkButtonProps {
 }
 
 const ExpandButton = styled(Button)({
-  boxShadow: 'none',
+  boxShadow: '0px 0px 10px 0px #1a1a1a',
   textTransform: 'none',
   fontSize: 16,
   padding: '6px 12px',

@@ -1,10 +1,10 @@
-import { AlertColor } from '@mui/material'
+import { AlertColor, Box } from '@mui/material'
 import { useState } from 'react'
 import CustomizedSnackbars from '../components/CustomizedSnackBars'
 import UserTable from '../components/UserTable'
 import useHandleDeleteUser from '../hooks/useHandleDeleteUser'
 import StyledButton from '../components/StyledButton'
-import ExpandLinkButton from '../components/ExpandLinkButton'
+import LinkButton from '../components/LinkButton'
 
 export default function Users() {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
@@ -18,11 +18,16 @@ export default function Users() {
   })
 
   return (
-    <div className="container-fluid">
-      <div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', padding: 20 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          marginBottom: 2,
+        }}
+      >
         <StyledButton onClick={handleDelete}>Delete Users</StyledButton>
-        <ExpandLinkButton to="/user/add">Add User</ExpandLinkButton>
-      </div>
+        <LinkButton to="/user/add">Add User</LinkButton>
+      </Box>
 
       <UserTable />
       <CustomizedSnackbars
@@ -31,6 +36,6 @@ export default function Users() {
         message={snackbarMessage}
         handleClose={() => setSnackbarOpen(false)}
       />
-    </div>
+    </Box>
   )
 }

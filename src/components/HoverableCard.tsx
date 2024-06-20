@@ -123,7 +123,7 @@ export default function HoverableCard(item: Anime) {
                 <AddIcon />
               </IconButton>
             )}
-            {user?.role !== 'ROLE_USER' && (
+            {user && user.role !== 'ROLE_USER' && (
               <IconButton onClick={() => setPopoverOpen(true)}>
                 <DeleteOutlineIcon />
               </IconButton>

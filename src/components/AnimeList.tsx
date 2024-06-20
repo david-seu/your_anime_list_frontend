@@ -120,7 +120,7 @@ export default function AnimeList() {
   }
 
   return (
-    <div>
+    <Box>
       <InfiniteScroll
         dataLength={animeList.length}
         next={fetchMoreData}
@@ -143,6 +143,12 @@ export default function AnimeList() {
                     '.delete-icon': { display: 'block' },
                     '.hover-image': { display: 'block' },
                   },
+                  borderStyle: 'solid',
+                  borderWidth: 1,
+                  borderColor: '#39A0ED',
+                  borderRadius: 5,
+                  marginBottom: 2,
+                  marginTop: 1,
                 }}
               >
                 <Box
@@ -161,7 +167,7 @@ export default function AnimeList() {
                     <img
                       src={item.anime?.pictureURL}
                       alt={item.anime?.title}
-                      style={{ width: '100%', height: '100%' }}
+                      style={{ width: '100%', height: '100%', borderRadius: 5 }}
                     />
                   </Link>
                 </Box>
@@ -171,7 +177,12 @@ export default function AnimeList() {
                       variant="square"
                       src={item.anime?.pictureURL}
                       alt={item.anime?.title}
-                      sx={{ width: 60, height: 100, margin: 2 }}
+                      sx={{
+                        width: 60,
+                        height: 100,
+                        margin: 2,
+                        borderRadius: 1,
+                      }}
                     />
                   </Link>
                 </ListItemAvatar>
@@ -232,13 +243,13 @@ export default function AnimeList() {
                         justifyContent="space-between"
                         alignItems="center"
                       >
-                        <Typography variant="body2" color="textSecondary">
+                        <Typography variant="body2" color="#39A0ED">
                           {item.anime?.type} • {item.anime?.nrEpisodes} episodes
                         </Typography>
-                        <Typography variant="body2" color="textSecondary">
+                        <Typography variant="body2" color="#39A0ED">
                           {item.status}
                         </Typography>
-                        <Typography variant="body1" color="textSecondary">
+                        <Typography variant="body1" color="#39A0ED">
                           {item.score}
                         </Typography>
                       </Box>
@@ -291,6 +302,6 @@ export default function AnimeList() {
         message={snackbarMessage}
         handleClose={() => setSnackbarOpen(false)}
       />
-    </div>
+    </Box>
   )
 }

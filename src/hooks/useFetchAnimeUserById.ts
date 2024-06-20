@@ -19,7 +19,7 @@ const useFetchAnimeUserById = ({ setAnime }: UseFetchAnimeUserByIdProps) => {
       .catch((e) => {
         if (e.response.status === 404) {
           setAnime({
-            id: 0,
+            id: -1,
             anime: null,
             user: null,
             isFavorite: false,

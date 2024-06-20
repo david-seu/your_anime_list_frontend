@@ -39,7 +39,7 @@ const useSignIn = ({
           signIn(result.data)
           setSnackbarType('warning')
           setSnackbarMessage('2 Factor Authentication required to log')
-          navigate('/confirm')
+          navigate('/login/confirm')
         }
       })
       .catch((error) => {

@@ -11,7 +11,9 @@ import {
   TextField,
   Button,
 } from '@mui/material'
+import { useEffect } from 'react'
 import AnimeUser from '../data/AnimeUser'
+import formatDate from '../utils/formatDateForm'
 
 interface EditAnimeDialogProps {
   openDialog: boolean
@@ -28,6 +30,11 @@ export default function EditAnimeDialog({
   handleCloseDialog,
   handleSave,
 }: EditAnimeDialogProps) {
+  useEffect(() => {
+    console.log(selectedAnime)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <Dialog open={openDialog} onClose={handleCloseDialog}>
       <DialogTitle
@@ -60,11 +67,7 @@ export default function EditAnimeDialog({
           label="Start Date"
           type="date"
           fullWidth
-          value={
-            selectedAnime.startDate instanceof Date
-              ? selectedAnime.startDate.toISOString().split('T')[0]
-              : ''
-          }
+          value={formatDate(selectedAnime.endDate as Date)}
           onChange={(e) =>
             setSelectedAnime({
               ...selectedAnime,
@@ -77,11 +80,7 @@ export default function EditAnimeDialog({
           label="End Date"
           type="date"
           fullWidth
-          value={
-            selectedAnime.endDate instanceof Date
-              ? selectedAnime.endDate.toISOString().split('T')[0]
-              : ''
-          }
+          value={formatDate(selectedAnime.endDate as Date)}
           onChange={(e) =>
             setSelectedAnime({
               ...selectedAnime,

@@ -2,7 +2,6 @@
 import { SetStateAction, Dispatch } from 'react'
 import useUserStore from '../store/useUserStore'
 import AnimeUser from '../data/AnimeUser'
-import useAnimeUserStore from '../store/useAnimeUserStore'
 import { addAnimeUser } from '../services/AnimeUserService'
 import formatDate from '../utils/formatDate'
 
