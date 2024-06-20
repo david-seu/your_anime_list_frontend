@@ -7,6 +7,7 @@ interface AnimeStore {
   top100AnimeList: Anime[]
   mostPopularAnimeList: Anime[]
   mostPopularAnimeThisSeasonList: Anime[]
+  recommendedAnimeList: Anime[]
   page: number
   hasMore: boolean
   title: string
@@ -19,6 +20,7 @@ interface AnimeStore {
   type: string[]
   status: string | null
   orderBy: string | null
+  setRecommendedAnimeList: (animeList: Anime[]) => void
   setTop100AnimeList: (animeList: Anime[]) => void
   setMostPopularAnimeList: (animeList: Anime[]) => void
   setMostPopularAnimeThisSeasonList: (animeList: Anime[]) => void
@@ -49,6 +51,7 @@ export const useAnimeStore = create<AnimeStore>()(
   persist(
     (set, get) => ({
       animeList: [],
+      recommendedAnimeList: [],
       top100AnimeList: [],
       mostPopularAnimeList: [],
       mostPopularAnimeThisSeasonList: [],
@@ -64,6 +67,8 @@ export const useAnimeStore = create<AnimeStore>()(
       type: [],
       status: null,
       orderBy: null,
+      setRecommendedAnimeList: (recommendedAnimeList: Anime[]) =>
+        set({ recommendedAnimeList }),
       setTop100AnimeList: (top100AnimeList: Anime[]) =>
         set({ top100AnimeList }),
       setMostPopularAnimeList: (mostPopularAnimeList: Anime[]) =>

@@ -30,6 +30,9 @@ import useUserStore from '../store/useUserStore'
 import useDeleteAnime from '../hooks/useDeleteAnime'
 import StyledButton from '../components/StyledButton'
 import CustomizedSnackbars from '../components/CustomizedSnackBars'
+import AnimeGridPreviw from '../components/AnimeGridPreview'
+import useAnimeStore from '../store/useAnimeStore'
+import useFetchRecommendedAnime from '../hooks/useFetchRecommendations'
 
 export default function ViewAnime(): JSX.Element {
   const [anime, setAnime] = useState<Anime>()
@@ -38,6 +41,7 @@ export default function ViewAnime(): JSX.Element {
   const [snackbarType, setSnackbarType] = useState('')
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [popoverOpen, setPopoverOpen] = useState(false)
+  const recommedAnimeList = useAnimeStore((state) => state.recommendedAnimeList)
 
   const { id } = useParams<{ id: string }>() as unknown as { id: string }
 
@@ -46,10 +50,18 @@ export default function ViewAnime(): JSX.Element {
     setAnime,
   })
 
+  const getRecommendedAnime = useFetchRecommendedAnime({
+    anime: anime!,
+    setSnackbarOpen,
+    setSnackbarType,
+    setSnackbarMessage,
+  })
+
   useEffect(() => {
     fetchAnimeById()
+    getRecommendedAnime()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [id])
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
@@ -296,6 +308,18 @@ export default function ViewAnime(): JSX.Element {
         message={snackbarMessage}
         handleClose={() => setSnackbarOpen(false)}
       />
+      <Box sx={{ mt: 2 }}>
+        <Typography
+          variant="h5"
+          component="div"
+          align="center"
+          color="#39A0ED"
+          gutterBottom
+        >
+          Recommended Anime
+        </Typography>
+        <AnimeGridPreviw animeList={recommedAnimeList} />
+      </Box>
     </div>
   )
 }

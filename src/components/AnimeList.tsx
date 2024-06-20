@@ -162,18 +162,20 @@ export default function AnimeList() {
                     zIndex: 10,
                   }}
                 >
-                  <img
-                    src={item.anime.pictureURL}
-                    alt={item.anime.title}
-                    style={{ width: '100%', height: '100%' }}
-                  />
+                  <Link to={`/anime/${item.anime?.id}`}>
+                    <img
+                      src={item.anime?.pictureURL}
+                      alt={item.anime?.title}
+                      style={{ width: '100%', height: '100%' }}
+                    />
+                  </Link>
                 </Box>
                 <ListItemAvatar>
-                  <Link to={`/anime/${item.id}`}>
+                  <Link to={`/anime/${item.anime?.id}`}>
                     <Avatar
                       variant="square"
-                      src={item.anime.pictureURL}
-                      alt={item.anime.title}
+                      src={item.anime?.pictureURL}
+                      alt={item.anime?.title}
                       sx={{ width: 60, height: 100, margin: 2 }}
                     />
                   </Link>
@@ -193,7 +195,7 @@ export default function AnimeList() {
                       >
                         #{index + 1}
                       </Typography>
-                      {item.anime.title}
+                      {item.anime?.title}
                       {item.isFavorite && (
                         <Star
                           sx={{
@@ -214,19 +216,21 @@ export default function AnimeList() {
                         mt={1}
                         mb={1}
                       >
-                        {item.anime.genres.map((genre: string, idx: number) => (
-                          <Chip
-                            key={idx}
-                            label={genre}
-                            variant="filled"
-                            size="small"
-                            sx={{
-                              marginRight: 1,
-                              backgroundColor: '#39A0ED',
-                              color: 'black',
-                            }}
-                          />
-                        ))}
+                        {item.anime?.genres.map(
+                          (genre: string, idx: number) => (
+                            <Chip
+                              key={idx}
+                              label={genre}
+                              variant="filled"
+                              size="small"
+                              sx={{
+                                marginRight: 1,
+                                backgroundColor: '#39A0ED',
+                                color: 'black',
+                              }}
+                            />
+                          )
+                        )}
                       </Box>
                       <Box
                         display="flex"
@@ -234,7 +238,7 @@ export default function AnimeList() {
                         alignItems="center"
                       >
                         <Typography variant="body2" color="textSecondary">
-                          {item.anime.type} • {item.anime.nrEpisodes} episodes
+                          {item.anime?.type} • {item.anime?.nrEpisodes} episodes
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
                           {item.status}
