@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Add as AddIcon } from '@mui/icons-material'
+import { Add as AddIcon } from '@mui/icons-material' // Import AddIcon
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import Anime from '../data/Anime'
 import EditAnimeDialog from './EditAnimeDialog'
@@ -74,6 +74,7 @@ export default function HoverableCard(item: Anime) {
   }
 
   const handleSave = () => {
+    // Logic to save the anime user
     console.log('Save changes for:', selectedAnime)
     if (selectedAnime?.id === 0) {
       console.log('Add anime to user list')
@@ -110,6 +111,7 @@ export default function HoverableCard(item: Anime) {
           image={item?.pictureURL}
           alt={item?.title}
           onClick={() => navigate(`/anime/${item?.id}`)}
+          sx={{ cursor: 'pointer' }}
         />
         <CardContent>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -118,7 +120,7 @@ export default function HoverableCard(item: Anime) {
                 <AddIcon />
               </IconButton>
             )}
-            {user && user.role !== 'ROLE_USER' && (
+            {user?.role !== 'ROLE_USER' && (
               <IconButton onClick={() => setPopoverOpen(true)}>
                 <DeleteOutlineIcon />
               </IconButton>
@@ -137,7 +139,7 @@ export default function HoverableCard(item: Anime) {
             backgroundColor: '#0B3954',
             borderRadius: '10px',
             border: '1px solid #1a1a1a',
-            boxShadow: '0px 0px 10px 0px #1a1a1a',
+            boxShadow: '0px 0px 10 px 0px #1a1a1a',
           },
         }}
         onClose={() => setPopoverOpen(false)}
@@ -168,7 +170,7 @@ export default function HoverableCard(item: Anime) {
       <Popover
         id="mouse-over-popover"
         sx={{
-          pointerEvents: 'pointer',
+          pointerEvents: 'none',
           '.MuiPaper-root': {
             backgroundColor: '#0B3954',
             borderRadius: '10px',
