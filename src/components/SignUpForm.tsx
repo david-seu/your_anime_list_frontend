@@ -10,7 +10,7 @@ export default function SignUpForm() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
-  const [role, setRole] = useState('')
+  const role = 'ROLE_USER'
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarType, setSnackbarType] = useState('')
   const [snackbarMessage, setSnackbarMessage] = useState('')
