@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { AlertColor } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import CustomizedSnackbars from './CustomizedSnackBars'
-import Loader from './Loader'
+import GridLoader from './GridLoader'
 import useUserStore from '../store/useUserStore'
 import useFetchUsers from '../hooks/useFetchUsers'
 import User from '../data/User'
@@ -69,7 +69,7 @@ export default function UserTable() {
         dataLength={usersList.length}
         next={fetchMoreData}
         hasMore={hasMore}
-        loader={<Loader />}
+        loader={<GridLoader />}
         endMessage={
           <p style={{ textAlign: 'center' }}>
             <b>Yay! You have seen it all</b>

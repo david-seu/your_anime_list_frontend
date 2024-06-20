@@ -10,6 +10,8 @@ import {
   AlertColor,
   Checkbox,
   ListItemText,
+  Button,
+  Menu,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import '../App.css'
@@ -20,6 +22,7 @@ import Genre from '../data/Genre'
 import useAnimeStore from '../store/useAnimeStore'
 import useFetchAnimeSeason from '../hooks/useFetchAnimeSeason'
 import useAnimeSeasonStore from '../store/useAnimeSeasonStore'
+import StyledButton from './StyledButton'
 
 const CssTextField = styled(TextField)({
   '& label': {
@@ -99,10 +102,12 @@ const MenuProps = {
 }
 
 export default function FilterBar() {
+  const [sortAnchorEl, setSortAnchorEl] = useState(null)
   const setGenres = useAnimeStore((state) => state.setGenres)
   const setTypes = useAnimeStore((state) => state.setType)
   const setSeason = useAnimeStore((state) => state.setSeason)
   const setTitle = useAnimeStore((state) => state.setTitle)
+  const setOrderBy = useAnimeStore((state) => state.setOrderBy)
   const season = useAnimeStore((state) => state.season)
   const search = useAnimeStore((state) => state.title)
   const genres = useGenreStore((state) => state.genre)
@@ -110,6 +115,7 @@ export default function FilterBar() {
   const [snackbarType, setSnackbarType] = useState('')
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const years = useAnimeSeasonStore((state) => state.animeSeason)
+  const setSortDirection = useAnimeStore((state) => state.setSortDirection)
   const setYear = useAnimeStore((state) => state.setYear)
   const year = useAnimeStore((state) => state.year)
   const genresChoice = useAnimeStore((state) => state.genres)
@@ -117,6 +123,9 @@ export default function FilterBar() {
 
   const seasons = ['SPRING', 'SUMMER', 'FALL', 'WINTER']
   const types = ['TV', 'Movie', 'OVA', 'ONA']
+
+  const open = Boolean(sortAnchorEl)
+  const sortOptions = ['Score', 'Popularity']
 
   const fetchGenre = useFetchGenre({
     setSnackbarType,
@@ -135,6 +144,20 @@ export default function FilterBar() {
     fetchAnimeSeason()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const handleSortClick = (event: any) => {
+    setSortAnchorEl(event.currentTarget)
+  }
+
+  const handleSortClose = (option: string) => {
+    setOrderBy(option.toLowerCase())
+    if (option === 'Score') {
+      setSortDirection('desc')
+    } else {
+      setSortDirection('asc')
+    }
+    setSortAnchorEl(null)
+  }
 
   const handleGenreChange = (event: any) => {
     setGenres(event.target.value)
@@ -187,14 +210,28 @@ export default function FilterBar() {
               Array.isArray(selected) ? selected.join(', ') : selected
             }
           >
-            {genres.map((g: Genre, index: number) => (
-              <MenuItem key={index} value={g.name.toLowerCase()}>
-                <Checkbox
-                  checked={genresChoice.indexOf(g.name.toLowerCase()) > -1}
-                />
-                <ListItemText primary={g.name} />{' '}
-              </MenuItem>
-            ))}
+            {genres.map((g: Genre, index: number) => {
+              const isChecked = genresChoice.indexOf(g.name.toLowerCase()) > -1
+              return (
+                <MenuItem
+                  key={index}
+                  value={g.name.toLowerCase()}
+                  sx={{
+                    backgroundColor: isChecked ? '#green' : 'transparent', // Background color if checked
+                    color: isChecked ? '#222' : '#39A0ED', // Text color if checked
+                    '&:hover': {
+                      backgroundColor: '#39A0ED', // Hover background color
+                      color: '#222', // Hover text color
+                    },
+                  }}
+                >
+                  <Checkbox
+                    checked={genresChoice.indexOf(g.name.toLowerCase()) > -1}
+                  />
+                  <ListItemText primary={g.name} />{' '}
+                </MenuItem>
+              )
+            })}
           </Select>
         </CssFormControl>
         <CssFormControl
@@ -210,7 +247,16 @@ export default function FilterBar() {
             MenuProps={MenuProps}
           >
             {years.map((y, index) => (
-              <MenuItem key={index} value={y}>
+              <MenuItem
+                key={index}
+                value={y}
+                sx={{
+                  '&:hover': {
+                    backgroundColor: '#39A0ED', // Hover background color
+                    color: '#222', // Hover text color
+                  },
+                }}
+              >
                 {y}
               </MenuItem>
             ))}
@@ -229,7 +275,16 @@ export default function FilterBar() {
             MenuProps={MenuProps}
           >
             {seasons.map((s, index) => (
-              <MenuItem key={index} value={s.toLowerCase()}>
+              <MenuItem
+                key={index}
+                value={s.toLowerCase()}
+                sx={{
+                  '&:hover': {
+                    backgroundColor: '#39A0ED', // Hover background color
+                    color: '#222', // Hover text color
+                  },
+                }}
+              >
                 {s}
               </MenuItem>
             ))}
@@ -252,13 +307,57 @@ export default function FilterBar() {
             }
           >
             {types.map((t, index) => (
-              <MenuItem key={index} value={t.toLowerCase()}>
+              <MenuItem
+                key={index}
+                value={t.toLowerCase()}
+                sx={{
+                  '&:hover': {
+                    backgroundColor: '#39A0ED', // Hover background color
+                    color: '#222', // Hover text color
+                  },
+                }}
+              >
                 <Checkbox checked={typesChoice.indexOf(t.toLowerCase()) > -1} />
                 <ListItemText primary={t} />{' '}
               </MenuItem>
             ))}
           </Select>
         </CssFormControl>
+        <StyledButton
+          aria-controls="sort-menu"
+          aria-haspopup="true"
+          onClick={handleSortClick}
+        >
+          Sort By
+        </StyledButton>
+        <Menu
+          id="sort-menu"
+          anchorEl={sortAnchorEl}
+          keepMounted
+          open={open}
+          onClose={handleSortClose}
+          sx={{
+            '& .MuiPaper-root': {
+              backgroundColor: '#222', // Background color
+              color: '#39A0ED', // Text color
+            },
+          }}
+        >
+          {sortOptions.map((option, index) => (
+            <MenuItem
+              key={index}
+              onClick={() => handleSortClose(option)}
+              sx={{
+                '&:hover': {
+                  backgroundColor: '#39A0ED', // Hover background color
+                  color: '#222', // Hover text color
+                },
+              }}
+            >
+              {option}
+            </MenuItem>
+          ))}
+        </Menu>
       </Box>
       <CustomizedSnackbars
         open={snackbarOpen}

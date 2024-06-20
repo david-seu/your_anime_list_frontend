@@ -18,7 +18,7 @@ const useFetchAnimeSeason = ({
     fetchAnimeSeasons()
       .then((result: { data: string[]; status: number }) => {
         if (result.status === 200) {
-          setAnimeSeason(result.data)
+          setAnimeSeason(result.data.sort().reverse())
         }
       })
       .catch((error: { message: string }) => {

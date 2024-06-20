@@ -1,14 +1,19 @@
 import styled from '@emotion/styled'
 import { Button } from 'react-bootstrap'
+import { Add as AddIcon } from '@mui/icons-material'
 
 const StyledButton = styled(Button)({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
   boxShadow: 'none',
   textTransform: 'none',
   fontSize: 16,
   lineHeight: 1.5,
   backgroundColor: '#1a1a1a',
   color: '#39A0ED',
-  borderStyle: 'none',
+  borderColor: '#39A0ED',
+  borderStyle: 'solid',
   transition: 'all 0.3s ease',
   fontFamily: [
     '-apple-system',

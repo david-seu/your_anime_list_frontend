@@ -7,13 +7,13 @@ import MenuItem from '@mui/material/MenuItem'
 import IconButton from '@mui/material/IconButton'
 import AddIcon from '@mui/icons-material/Add'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import useUserStore from '../store/useUserStore'
 import ExpandLinkButton from './ExpandLinkButton'
 import User from '../data/User'
 import LinkButton from './LinkButton'
 import useSignOut from '../hooks/useSignOut'
 import StyledButton from './StyledButton'
-import { Link } from 'react-router-dom'
 
 export default function CustomNavBar() {
   const user = useUserStore((state) => state.currentUser) as User
@@ -38,7 +38,7 @@ export default function CustomNavBar() {
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           {!user && <ExpandLinkButton to="/signup">Sign Up</ExpandLinkButton>}
-          {!user && <LinkButton to="/">Sign In</LinkButton>}
+          {!user && <LinkButton to="/login">Sign In</LinkButton>}
           {user && (
             <ExpandLinkButton to="/anime/mine">
               Your Anime List
@@ -63,9 +63,10 @@ export default function CustomNavBar() {
           {user && user.role === 'ROLE_ADMIN' && (
             <ExpandLinkButton to="/user">Users</ExpandLinkButton>
           )}
-          <LinkButton to="/home">
+          <LinkButton to="/">
             <HomeIcon />
           </LinkButton>
+          <LinkButton to="/anime">Browse</LinkButton>
           {user && <StyledButton onClick={signOut}>Sign Out</StyledButton>}
         </Toolbar>
       </AppBar>

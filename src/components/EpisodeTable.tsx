@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import Episode from '../data/Episode'
 import useEpisodeStore from '../store/useEpisodeStore'
 import CustomizedSnackbars from './CustomizedSnackBars'
-import Loader from './Loader'
+import GridLoader from './GridLoader'
 import useFetchMoreEpisodes from '../hooks/useFetchMoreEpisodes'
 import useFetchEpisodes from '../hooks/useFetchEpisodes'
 import useUserStore from '../store/useUserStore'
@@ -74,7 +74,7 @@ export default function EpisodeTable() {
         dataLength={episodeList.length}
         next={fetchMoreData}
         hasMore={hasMore}
-        loader={<Loader />}
+        loader={<GridLoader />}
         endMessage={
           <p style={{ textAlign: 'center' }}>
             <b>Yay! You have seen it all</b>

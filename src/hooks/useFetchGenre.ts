@@ -19,7 +19,7 @@ const useFetchGenre = ({
     fetchGenres()
       .then((result: { data: Genre[]; status: number }) => {
         if (result.status === 200) {
-          setGenre(result.data)
+          setGenre(result.data.sort((a, b) => a.name.localeCompare(b.name)))
         }
       })
       .catch((error: { message: string }) => {

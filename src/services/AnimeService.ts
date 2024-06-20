@@ -1,5 +1,6 @@
 import axios from 'axios'
 import * as rax from 'retry-axios'
+import qs from 'qs'
 import Anime from '../data/Anime'
 // eslint-disable-next-line import/no-extraneous-dependencies
 
@@ -9,8 +10,8 @@ rax.attach()
 
 export const fetchAnime = async (
   page = 0,
-  sortDirection = 'desc',
-  title = '',
+  sortDirection: string = 'desc',
+  title: string = '',
   season: string | null = null,
   year: number | null = null,
   genres: string[] = [],
@@ -34,6 +35,8 @@ export const fetchAnime = async (
       status,
       orderBy,
     },
+    paramsSerializer: (params) =>
+      qs.stringify(params, { arrayFormat: 'repeat' }),
     raxConfig: {
       retry: 100,
       noResponseRetries: 100,

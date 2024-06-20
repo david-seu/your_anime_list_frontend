@@ -16,7 +16,6 @@ import { Link } from 'react-router-dom'
 import { Star, Edit, Close } from '@mui/icons-material'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useEffect, useState } from 'react'
-import Loader from './Loader'
 import CustomizedSnackbars from './CustomizedSnackBars'
 import useAnimeUserStore from '../store/useAnimeUserStore'
 import useFetchAnimeUser from '../hooks/useFetchAnimeUser'
@@ -25,6 +24,7 @@ import AnimeUser from '../data/AnimeUser'
 import EditAnimeDialog from './EditAnimeDialog'
 import useEditAnimeUser from '../hooks/useEditAnimeUser'
 import useDeleteAnimeUser from '../hooks/useDeleteAnimeUser'
+import ListLoader from './ListLoader'
 
 export default function AnimeList() {
   const animeList = useAnimeUserStore((state) => state.animeList)
@@ -125,12 +125,7 @@ export default function AnimeList() {
         dataLength={animeList.length}
         next={fetchMoreData}
         hasMore={hasMore}
-        loader={<Loader />}
-        endMessage={
-          <p style={{ textAlign: 'center' }}>
-            <b>Yay! You have seen it all</b>
-          </p>
-        }
+        loader={<ListLoader />}
         style={{ backgroundColor: 'transparent' }}
       >
         <Box sx={{ width: '100%' }}>

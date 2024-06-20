@@ -4,7 +4,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { AlertColor, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import '../App.css'
-import FilterBar from '../components/FilterBar'
 import AnimePreviewList from '../components/AnimeListPreview'
 import useFetchTop100Anime from '../hooks/useFetchTop100Anime'
 import CustomizedSnackbars from '../components/CustomizedSnackBars'
@@ -50,6 +49,7 @@ export default function Home(): JSX.Element {
   })
 
   useEffect(() => {
+    console.log('fetching data')
     fetchTop100Anime()
     fetchMostPopularAnime()
     fetchMostPopularAnimeThisSeason()
@@ -83,7 +83,6 @@ export default function Home(): JSX.Element {
   return (
     <div>
       <div className="home-container">
-        <FilterBar />
         <div
           style={{
             display: 'flex',
@@ -132,7 +131,7 @@ export default function Home(): JSX.Element {
           >
             Top 100
           </Typography>
-          <HandlerButton onClick={handleTop100Click}>View All</HandlerButton>
+          <StyledButton onClick={handleTop100Click}>View All</StyledButton>
         </div>
 
         <AnimePreviewList animeList={top100Anime.slice(0, 5)} />

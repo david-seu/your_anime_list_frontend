@@ -11,7 +11,7 @@ import Anime from '../data/Anime'
 import useAnimeStore from '../store/useAnimeStore'
 import useFetchAnime from '../hooks/useFetchAnime'
 import CustomizedSnackbars from './CustomizedSnackBars'
-import Loader from './Loader'
+import GridLoader from './GridLoader'
 import useUserStore from '../store/useUserStore'
 import useFetchMoreAnime from '../hooks/useFetchMoreAnimeUser'
 
@@ -97,7 +97,7 @@ export default function AnimeTable() {
         dataLength={animeList.length}
         next={fetchMoreData}
         hasMore={hasMore}
-        loader={<Loader />}
+        loader={<GridLoader />}
         endMessage={
           <p style={{ textAlign: 'center' }}>
             <b>Yay! You have seen it all</b>

@@ -3,7 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import AnimeGrid from '../components/AnimeGrid'
 import '../App.css'
 import FilterBar from '../components/FilterBar'
-import AnimePreviewList from '../components/AnimeListPreview'
 
 export default function Anime(): JSX.Element {
   return (

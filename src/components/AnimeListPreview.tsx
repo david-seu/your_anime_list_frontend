@@ -12,7 +12,7 @@ import {
   AlertColor,
 } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Add as AddIcon } from '@mui/icons-material' // Import AddIcon
 import Anime from '../data/Anime'
 import useUserStore from '../store/useUserStore'
@@ -42,6 +42,11 @@ export default function AnimeListPreview({ animeList }: AnimeListProps) {
     getAnimeUser(anime.id)
     setOpenDialog(true)
   }
+
+  useEffect(() => {
+    console.log('animeList:', animeList)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const updateAnimeUser = useEditAnimeUser({
     animeUser: selectedAnime!,

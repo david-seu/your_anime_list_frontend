@@ -45,7 +45,7 @@ const useFetchAnime = ({
       .then((result: { data: Anime[]; status: number }) => {
         if (result.status === 200) {
           setAnimeStore(result.data)
-          if (result.data.length < 10) setHasMoreStore(false)
+          if (result.data.length <= 50) setHasMoreStore(false)
           else setHasMoreStore(true)
           setSnackbarType('success')
           setSnackbarMessage('Successfully fetched anime')

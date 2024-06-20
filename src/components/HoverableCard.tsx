@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/destructuring-assignment */
 import {
   AlertColor,
   Box,
@@ -13,7 +11,7 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Add as AddIcon } from '@mui/icons-material' // Import AddIcon
+import { Add as AddIcon } from '@mui/icons-material'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import Anime from '../data/Anime'
 import EditAnimeDialog from './EditAnimeDialog'
@@ -28,12 +26,13 @@ import StyledButton from './StyledButton'
 
 export default function HoverableCard(item: Anime) {
   const user = useUserStore((state) => state.currentUser)
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [openDialog, setOpenDialog] = useState(false)
   const [selectedAnime, setSelectedAnime] = useState<AnimeUser | null>(null)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarType, setSnackbarType] = useState('')
   const [snackbarMessage, setSnackbarMessage] = useState('')
+
   const [popoverOpen, setPopoverOpen] = useState(false)
 
   const getAnimeUser = useFetchAnimeUserById({ setAnime: setSelectedAnime })
@@ -106,13 +105,16 @@ export default function HoverableCard(item: Anime) {
         aria-owns={open ? 'mouse-over-popover' : undefined}
         aria-haspopup="true"
         className="hoverable-card"
+        sx={{
+          overflow: 'visible', // Ensure the card does not hide overflow
+        }}
       >
         <CardMedia
           component="img"
           height="200"
-          image={item.pictureURL}
-          alt={item.title}
-          onClick={() => navigate(`/anime/${item.id}`)}
+          image={item?.pictureURL}
+          alt={item?.title}
+          onClick={() => navigate(`/anime/${item?.id}`)}
         />
         <CardContent>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -127,7 +129,7 @@ export default function HoverableCard(item: Anime) {
               </IconButton>
             )}
             <Typography variant="body2" color="#39A0ED">
-              {item.title}
+              {item?.title}
             </Typography>
           </div>
         </CardContent>
@@ -140,7 +142,7 @@ export default function HoverableCard(item: Anime) {
             backgroundColor: '#0B3954',
             borderRadius: '10px',
             border: '1px solid #1a1a1a',
-            boxShadow: '0px 0px 10  px 0px #1a1a1a',
+            boxShadow: '0px 0px 10px 0px #1a1a1a',
           },
         }}
         onClose={() => setPopoverOpen(false)}
@@ -171,7 +173,7 @@ export default function HoverableCard(item: Anime) {
       <Popover
         id="mouse-over-popover"
         sx={{
-          pointerEvents: 'none',
+          pointerEvents: 'auto',
           '.MuiPaper-root': {
             backgroundColor: '#0B3954',
             borderRadius: '10px',
@@ -193,16 +195,16 @@ export default function HoverableCard(item: Anime) {
       >
         <Box p={2} className="popover-card">
           <Typography variant="body1">
-            {item.animeSeason.season} {item.animeSeason.year}
+            {item?.animeSeason.season} {item?.animeSeason.year}
           </Typography>
           <Typography variant="subtitle1" style={{ color: '#39A0ED' }}>
-            {item.studios.join(', ')}
+            {item?.studios.join(', ')}
           </Typography>
           <Typography variant="subtitle2">
-            {item.type} • {item.nrEpisodes} Episodes
+            {item?.type} • {item?.nrEpisodes} Episodes
           </Typography>
           <Box mt={1} mb={1}>
-            {item.genres.map((genre: string) => (
+            {item?.genres.map((genre: string) => (
               <Chip
                 key={genre}
                 label={genre}
@@ -215,7 +217,7 @@ export default function HoverableCard(item: Anime) {
               />
             ))}
           </Box>
-          <Typography variant="caption">Rating: {item.score}</Typography>
+          <Typography variant="caption">Rating: {item?.score}</Typography>
         </Box>
       </Popover>
       {selectedAnime && (

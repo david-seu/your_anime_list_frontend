@@ -25,9 +25,9 @@ function App() {
     <div>
       <CustomNavBar />
       <Routes>
-        <Route path="/" element={<SignIn />} />
-        <Route path="/confirm" element={<ConfirmLogin />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/login" element={<SignIn />} />
+        <Route path="/login/confirm" element={<ConfirmLogin />} />
+        <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signup/confirm" element={<ConfirmRegister />} />
         <Route path="/anime/new" element={<AddAnime />} />

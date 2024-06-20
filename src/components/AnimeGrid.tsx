@@ -4,7 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { useEffect, useState } from 'react'
 import HoverableCard from './HoverableCard'
 import useAnimeStore from '../store/useAnimeStore'
-import Loader from './Loader'
+import GridLoader from './GridLoader'
 import CustomizedSnackbars from './CustomizedSnackBars'
 import useFetchMoreAnime from '../hooks/useFetchMoreAnimeUser'
 import useFetchAnime from '../hooks/useFetchAnime'
@@ -74,12 +74,7 @@ export default function AnimeGrid() {
         dataLength={animeList.length}
         next={fetchMoreData}
         hasMore={hasMore}
-        loader={<Loader />}
-        endMessage={
-          <p style={{ textAlign: 'center' }}>
-            <b>Yay! You have seen it all</b>
-          </p>
-        }
+        loader={<GridLoader />}
         style={{ backgroundColor: 'transparent' }}
       >
         <Grid container spacing={2}>

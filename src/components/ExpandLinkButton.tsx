@@ -39,7 +39,7 @@ const ExpandButton = styled(Button)({
 
 export default function ExpandLinkButton({ to, children }: LinkButtonProps) {
   return (
-    <Link to={to}>
+    <Link to={to} style={{ textDecoration: 'none' }}>
       <ExpandButton>{children}</ExpandButton>
     </Link>
   )
