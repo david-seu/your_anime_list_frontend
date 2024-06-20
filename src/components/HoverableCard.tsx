@@ -26,13 +26,12 @@ import StyledButton from './StyledButton'
 
 export default function HoverableCard(item: Anime) {
   const user = useUserStore((state) => state.currentUser)
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+  const [anchorEl, setAnchorEl] = useState(null)
   const [openDialog, setOpenDialog] = useState(false)
   const [selectedAnime, setSelectedAnime] = useState<AnimeUser | null>(null)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarType, setSnackbarType] = useState('')
   const [snackbarMessage, setSnackbarMessage] = useState('')
-
   const [popoverOpen, setPopoverOpen] = useState(false)
 
   const getAnimeUser = useFetchAnimeUserById({ setAnime: setSelectedAnime })
@@ -75,7 +74,6 @@ export default function HoverableCard(item: Anime) {
   }
 
   const handleSave = () => {
-    // Logic to save the anime user
     console.log('Save changes for:', selectedAnime)
     if (selectedAnime?.id === 0) {
       console.log('Add anime to user list')
@@ -105,9 +103,6 @@ export default function HoverableCard(item: Anime) {
         aria-owns={open ? 'mouse-over-popover' : undefined}
         aria-haspopup="true"
         className="hoverable-card"
-        sx={{
-          overflow: 'visible', // Ensure the card does not hide overflow
-        }}
       >
         <CardMedia
           component="img"
@@ -173,7 +168,7 @@ export default function HoverableCard(item: Anime) {
       <Popover
         id="mouse-over-popover"
         sx={{
-          pointerEvents: 'auto',
+          pointerEvents: 'pointer',
           '.MuiPaper-root': {
             backgroundColor: '#0B3954',
             borderRadius: '10px',
